@@ -21,6 +21,7 @@
     "rollup-plugin-commonjs": "^8.4.1",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-uglify": "^3.0.0",
+    "simplex-noise": "^2.4.0",
     "three": "^0.97.0"
   }
 }
