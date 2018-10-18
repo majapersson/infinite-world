@@ -2,3 +2,4 @@ node_modules
 public/assets/styles/*.css
 public/assets/styles/*.map
 public/assets/scripts/*.js
+public/assets/scripts/*.js.map
