@@ -1,0 +1,20 @@
+// Responsive sizing
+@mixin bp($point) {
+  @if $point == small {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $point == medium {
+    @media (max-width: 1250px) {
+      @content;
+    }
+  } @else if $point == ipad {
+    @media (max-width: 1250px) and (min-height: 800px) {
+      @content;
+    }
+  } @else if $point == large {
+    @media (min-width: 1250px) {
+      @content;
+    }
+  }
+}
