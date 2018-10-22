@@ -1,4 +1,4 @@
-import { init, animate } from "./three";
+import { init, animate } from "./Scene";
 
 init();
 animate();
