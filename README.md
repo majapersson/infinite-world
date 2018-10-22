@@ -30,3 +30,26 @@ I want to try building a game with a procedurally generated world which the play
 - Multiplayer support
 - Endlessly generated world
 - Some _actual_ gameplay
+
+#### Changelog
+
+### 2018-10-23
+- Added raycasting, so that player movement is based on mouse movement
+- Can't figure out the y-position of player
+
+### 2018-10-22
+- Started on player movement
+
+### 2018-10-18
+- Sat the entire day trying to figure out why stuff would disappear behind terrain.
+- Realized I need to rotate stuff using radians, not degrees. Problem fixed!
+
+### 2018-10-17
+- Implemented simplex noise for natural randomness, started working on camera angles
+- Added materials, lights and shadows
+
+### 2018-10-16
+- Generated plane with random terrain, started researching Perlin/simplex noise
+
+### 2018-10-15
+- Set up basic structure, started playing around in three.js
