@@ -12,14 +12,13 @@ const SIZE = 10;
 const SEGMENTS = 40;
 
 const SMOOTHING = 4;
-const HEIGHT = 0.5;
-
-const simplex = new SimplexNoise();
+const HEIGHT = 1;
 
 export default class Terrain {
   constructor() {
     this.size = SIZE;
     this.segments = SEGMENTS;
+    this.simplex = new SimplexNoise(12345);
 
     this.geometry = new PlaneBufferGeometry(
       this.size,
@@ -43,7 +42,8 @@ export default class Terrain {
       if ((i + 1) % 3 === 0) {
         const x = vertices[i - 2];
         const y = vertices[i - 1];
-        vertices[i] = simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
+        vertices[i] =
+          this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
       }
     }
 
@@ -51,13 +51,7 @@ export default class Terrain {
     this.geometry.computeVertexNormals();
   }
 
-  getHeightAt(x, y) {
-    const vertices = this.geometry.getAttribute("position").array;
-
-    const z = vertices.filter(
-      (vertex, i) =>
-        (i + 1) % 3 === 0 && vertices[i - 2] === x && vertices[i - 1] === y
-    );
-    return z[0];
+  getHeightAt(y, x) {
+    return this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
   }
 }
