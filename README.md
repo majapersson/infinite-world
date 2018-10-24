@@ -15,13 +15,15 @@ More details and gameplay might be added along the way.
 
 - [x] Generate random z values to create hills
 - [x] Look up and implement Perlin/Simplex noise
-- [ ] Continuously add new terrain as the player moves
+- [ ] Generate terrain as a giant sphere, to avoid trouble with edges and adding new terrain
 - [x] Return z value to player
+- [ ] Generate some sort of environment
 
 #### Player
 
 - [x] Get y value from terrain
 - [x] Keyboard movements
+- [ ] First or third person view?
 
 #### Camera
 
@@ -32,7 +34,6 @@ More details and gameplay might be added along the way.
 - Multiplayer support
 - Endlessly generated world
 - Some _actual_ gameplay
-- Third person view
 
 #### Changelog
 

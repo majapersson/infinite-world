@@ -31,8 +31,7 @@ export default class Player {
       this.mesh.translateX(direction.x * 0.05);
       this.mesh.translateZ(direction.z * 0.05);
     }
-    console.log(position);
-    const y = terrain.getHeightAt(position.x, position.z);
+    const y = terrain.getHeightAt(position.x, -position.z) + this.height;
     position.y = y;
   }
 }

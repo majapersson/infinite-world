@@ -6,7 +6,7 @@ class Camera extends PerspectiveCamera {
     super(fov, aspect, near, far);
 
     this.height = 1.5;
-    this.speed = 0.05;
+    this.speed = 0.15;
 
     // Controls
     this.controls = {
@@ -34,9 +34,9 @@ class Camera extends PerspectiveCamera {
       z = border;
     }
 
-    y =
-      terrain.getHeightAt(roundTwoDecimals(x), roundTwoDecimals(-z)) +
-      this.height;
+    // y =
+    // terrain.getHeightAt(roundTwoDecimals(x), roundTwoDecimals(-z)) +
+    // this.height;
 
     this.position.set(x, y, z);
 
