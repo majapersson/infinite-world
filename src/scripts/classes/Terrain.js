@@ -8,10 +8,10 @@ import SimplexNoise from "simplex-noise";
 
 import { toRadians } from "../utils";
 
-const SIZE = 10;
-const SEGMENTS = 40;
+const SIZE = 50;
+const SEGMENTS = SIZE * 4;
 
-const SMOOTHING = 4;
+const SMOOTHING = 10;
 const HEIGHT = 1;
 
 export default class Terrain {
@@ -32,6 +32,7 @@ export default class Terrain {
       shininess: 0
     });
     this.mesh = new Mesh(this.geometry, this.material);
+    this.mesh.name = "Terrain";
     this.mesh.rotation.x = toRadians(-90);
   }
 
@@ -51,7 +52,7 @@ export default class Terrain {
     this.geometry.computeVertexNormals();
   }
 
-  getHeightAt(y, x) {
+  getHeightAt(x, y) {
     return this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
   }
 }
