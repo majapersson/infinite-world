@@ -2,36 +2,37 @@ import {
   Mesh,
   MeshPhongMaterial,
   PointLight,
-  ConeGeometry,
+  SphereGeometry,
   Vector3
 } from "three";
-import { toRadians } from "../utils";
+import { toRadians, roundTwoDecimals } from "../utils";
 
 export default class Player {
   constructor(terrainHeight) {
-    this.radius = 0.2;
+    this.radius = 0.5;
     this.height = 0.5;
     this.segments = 10;
-    this.geometry = new ConeGeometry(this.radius, this.height, this.segments);
+    this.geometry = new SphereGeometry(this.radius, this.segments);
     this.material = new MeshPhongMaterial({ color: 0xffff00, shininess: 0 });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.y = terrainHeight + this.height;
+    this.mesh.position.x = 1;
 
-    // Controls
-    this.up = 87;
-    this.down = 83;
-    this.left = 65;
-    this.right = 68;
+    this.speed = 0.05;
   }
 
   move(direction, terrain) {
     const { position } = this.mesh;
     if (direction) {
       direction.sub(position);
-      this.mesh.translateX(direction.x * 0.05);
-      this.mesh.translateZ(direction.z * 0.05);
+      this.mesh.translateX(direction.x * this.speed);
+      this.mesh.translateZ(direction.z * this.speed);
     }
-    const y = terrain.getHeightAt(position.x, -position.z) + this.height;
+    const y =
+      terrain.getHeightAt(
+        roundTwoDecimals(position.x),
+        roundTwoDecimals(-position.z)
+      ) + this.height;
     position.y = y;
   }
 }

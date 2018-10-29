@@ -9,7 +9,7 @@ import SimplexNoise from "simplex-noise";
 import { toRadians } from "../utils";
 
 const SIZE = 50;
-const SEGMENTS = SIZE * 4;
+const SEGMENTS = SIZE / 2;
 
 const SMOOTHING = 10;
 const HEIGHT = 1;
@@ -29,11 +29,12 @@ export default class Terrain {
     this.setHeight();
     this.material = new MeshPhongMaterial({
       color: 0x00ff00,
+      flatShading: true,
       shininess: 0
     });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
-    this.mesh.rotation.x = toRadians(-90);
+    this.mesh.rotateX(toRadians(-90));
   }
 
   setHeight() {

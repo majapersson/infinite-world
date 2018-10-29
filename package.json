@@ -7,7 +7,7 @@
     "build:styles": "node-sass src/styles/index.scss public/assets/styles/index.css",
     "watch:scripts": "rollup --config --watch",
     "watch:styles": "node-sass -w src/styles/index.scss public/assets/styles/index.css",
-    "watch": "npm-run-all --parallel browser watch:*"
+    "start": "npm-run-all --parallel browser watch:*"
   },
   "dependencies": {
     "babel-core": "^6.26.3",

@@ -20,26 +20,20 @@ const scene = new Scene();
 const renderer = new WebGLRenderer({ antialiasing: true });
 const keymap = {};
 const mouse = new Vector2();
+mouse.isPressed = false;
 
 const raycaster = new Raycaster();
 
 const terrain = new Terrain();
 
-const camera = new Camera(
+// Third person view
+const player = new Player(terrain.getHeightAt(0, 0));
+const camera = new PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-
-// Third person view
-// const player = new Player(terrain.getHeightAt(0, 0));
-// const camera = new PerspectiveCamera(
-//   75,
-//   window.innerWidth / window.innerHeight,
-//   0.1,
-//   1000
-// );
 camera.position.set(-2, 6, -5);
 camera.lookAt(scene.position);
 
@@ -48,23 +42,23 @@ export function init() {
   renderer.shadowMap.enabled = true;
   document.body.appendChild(renderer.domElement);
 
-  scene.add(terrain.mesh, hemiLight, dirLight);
+  scene.add(terrain.mesh, hemiLight, dirLight, player.mesh);
 }
 
 export function animate() {
   requestAnimationFrame(animate);
 
-  // First person controls
-  camera.move(keymap, terrain);
-
   // Third person controls
-  // raycaster.setFromCamera(mouse, camera);
-  // const intersection = raycaster.intersectObject(terrain.mesh);
-  // let direction = new Vector3();
-  // if (intersection.length > 0) {
-  //   direction = intersection[0].point;
-  // }
-  // player.move(direction, terrain);
+  raycaster.setFromCamera(mouse, camera);
+  const intersection = raycaster.intersectObject(terrain.mesh);
+  let direction = new Vector3();
+  if (intersection.length > 0) {
+    direction = intersection[0].point;
+  }
+
+  if (mouse.isPressed) {
+    player.move(direction, terrain);
+  }
 
   renderer.render(scene, camera);
 }
@@ -82,6 +76,12 @@ function moveMouse(e) {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
+function handleClick() {
+  mouse.isPressed = !mouse.isPressed;
+}
+
 window.addEventListener("keydown", keyDown);
 window.addEventListener("keyup", keyUp);
 window.addEventListener("mousemove", moveMouse);
+window.addEventListener("mousedown", handleClick);
+window.addEventListener("mouseup", handleClick);

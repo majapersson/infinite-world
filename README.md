@@ -9,15 +9,15 @@ A final project before graduating.
 The core concept is a procedurally generated world that the player walks around in and explores.
 More details and gameplay might be added along the way.
 
-### Stuff to fix
+### Priorities
 
 #### Terrain
 
 - [x] Generate random z values to create hills
 - [x] Look up and implement Perlin/Simplex noise
-- [ ] Generate terrain as a giant sphere, to avoid trouble with edges and adding new terrain
 - [x] Return z value to player
-- [ ] Generate some sort of environment
+- [ ] Generate environment (flowers, trees, ponds)
+- [ ] Look into how to add vertices to existing geometry, or shift geometry to new terrain
 
 #### Player
 
@@ -32,10 +32,15 @@ More details and gameplay might be added along the way.
 ### Backlog
 
 - Multiplayer support
-- Endlessly generated world
+- Continuously generated world, or world as sphere
 - Some _actual_ gameplay
 
 #### Changelog
+
+### 2018-10-24
+
+- Tried out both first and third person controls, kept both for later decision.
+- Tried out spheric world, but it got too complicated. Continuing with plane for now.
 
 ### 2018-10-23
 
