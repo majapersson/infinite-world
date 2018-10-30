@@ -38,6 +38,9 @@ More details and gameplay might be added along the way.
 
 ### Changelog
 
+##### 2018-10-30
+- Basic randomized addition of trees and flowers to terrain based on vertex and simplex noise
+
 ##### 2018-10-29
 
 - Decided on third person view and flat shaded art style for simplicity.
