@@ -10,6 +10,7 @@ import {
 
 import Terrain from "./classes/Terrain";
 import Flower from "./classes/Flower";
+import Tree from "./classes/Tree";
 import Player from "./classes/Player";
 import Camera from "./classes/Camera";
 import { hemiLight, dirLight } from "./classes/Lights";
@@ -27,6 +28,7 @@ const raycaster = new Raycaster();
 
 const terrain = new Terrain();
 const flower = new Flower(scene);
+const tree = new Tree(scene);
 
 // Third person view
 const player = new Player(terrain.getHeightAt(0, 0));
