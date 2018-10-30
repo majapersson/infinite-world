@@ -37,6 +37,11 @@ More details and gameplay might be added along the way.
 
 #### Changelog
 
+### 2018-10-29
+
+- Decided on third person view and flat shaded art style for simplicity.
+- Spent a lot of time trying to understand Blender. Finally managed to import 3D models.
+
 ### 2018-10-24
 
 - Tried out both first and third person controls, kept both for later decision.

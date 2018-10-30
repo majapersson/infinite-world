@@ -9,6 +9,7 @@ import {
 } from "three";
 
 import Terrain from "./classes/Terrain";
+import Flower from "./classes/Flower";
 import Player from "./classes/Player";
 import Camera from "./classes/Camera";
 import { hemiLight, dirLight } from "./classes/Lights";
@@ -25,6 +26,7 @@ mouse.isPressed = false;
 const raycaster = new Raycaster();
 
 const terrain = new Terrain();
+const flower = new Flower(scene);
 
 // Third person view
 const player = new Player(terrain.getHeightAt(0, 0));
@@ -37,9 +39,12 @@ const camera = new PerspectiveCamera(
 camera.position.set(-2, 6, -5);
 camera.lookAt(scene.position);
 
+const controls = new THREE.OrbitControls(camera);
+
 export function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
+  renderer.gammaOutput = true;
   document.body.appendChild(renderer.domElement);
 
   scene.add(terrain.mesh, hemiLight, dirLight, player.mesh);
@@ -49,16 +54,18 @@ export function animate() {
   requestAnimationFrame(animate);
 
   // Third person controls
-  raycaster.setFromCamera(mouse, camera);
-  const intersection = raycaster.intersectObject(terrain.mesh);
-  let direction = new Vector3();
-  if (intersection.length > 0) {
-    direction = intersection[0].point;
-  }
+  // raycaster.setFromCamera(mouse, camera);
+  // const intersection = raycaster.intersectObject(terrain.mesh);
+  // let direction = new Vector3();
+  // if (intersection.length > 0) {
+  //   direction = intersection[0].point;
+  // }
+  //
+  // if (mouse.isPressed) {
+  //   player.move(direction, terrain);
+  // }
 
-  if (mouse.isPressed) {
-    player.move(direction, terrain);
-  }
+  controls.update();
 
   renderer.render(scene, camera);
 }
