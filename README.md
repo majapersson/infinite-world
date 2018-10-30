@@ -17,13 +17,14 @@ More details and gameplay might be added along the way.
 - [x] Look up and implement Perlin/Simplex noise
 - [x] Return z value to player
 - [ ] Generate environment (flowers, trees, ponds)
+  - [ ] Randomize rotation, height and models of flowers and trees
 - [ ] Look into how to add vertices to existing geometry, or shift geometry to new terrain
 
 #### Player
 
 - [x] Get y value from terrain
-- [x] Keyboard movements
-- [ ] First or third person view?
+- [x] Mouse movements through raycasting
+- [x] Third person view
 
 #### Camera
 

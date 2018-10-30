@@ -26,9 +26,7 @@ mouse.isPressed = false;
 
 const raycaster = new Raycaster();
 
-const terrain = new Terrain();
-const flower = new Flower(scene);
-const tree = new Tree(scene);
+const terrain = new Terrain(scene);
 
 // Third person view
 const player = new Player(terrain.getHeightAt(0, 0));
