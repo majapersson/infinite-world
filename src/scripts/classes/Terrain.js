@@ -27,7 +27,7 @@ export default class Terrain {
     this.geometry = new PlaneBufferGeometry(
       this.size,
       this.size,
-      this.segments,
+      this.segments * 1.2,
       this.segments
     );
     this.setHeight();
@@ -55,6 +55,10 @@ export default class Terrain {
       if ((i + 1) % 3 === 0) {
         const x = vertices[i - 2];
         const y = vertices[i - 1];
+        const z = vertices[i];
+        vertices[i - 2] += this.simplex.noise2D(y, z);
+        vertices[i - 1] += this.simplex.noise2D(x, z);
+
         vertices[i] =
           this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
       }
