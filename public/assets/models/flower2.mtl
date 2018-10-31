@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 2
 
-newmtl Leave_Red_01.001
+newmtl Leave_Red_01.002
 Ns 9.803922
 Ka 1.000000 1.000000 1.000000
 Kd 0.423529 0.018824 0.018824
@@ -11,7 +11,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl Stem_Red_01.001
+newmtl Stem_Red_01.002
 Ns 9.803922
 Ka 1.000000 1.000000 1.000000
 Kd 0.292074 0.549020 0.183545

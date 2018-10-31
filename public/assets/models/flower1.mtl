@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 2
 
-newmtl Petal_Blue_01.002
+newmtl Petal_Blue_01.003
 Ns 9.803922
 Ka 1.000000 1.000000 1.000000
 Kd 0.520784 0.718431 0.718431
@@ -11,7 +11,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 
-newmtl Stem_Green_01.007
+newmtl Stem_Green_01.008
 Ns 9.803922
 Ka 1.000000 1.000000 1.000000
 Kd 0.191373 0.423529 0.018824
