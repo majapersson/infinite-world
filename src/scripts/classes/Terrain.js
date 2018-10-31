@@ -88,8 +88,7 @@ export default class Terrain {
   addTrees(scene) {
     for (let i = 0; i < this.splitVertices.length; i += this.treeSpread) {
       const addTree =
-        this.simplex.noise3D(
-          this.splitVertices[i].x * SMOOTHING,
+        this.simplex.noise2D(
           this.splitVertices[i].y * SMOOTHING,
           this.splitVertices[i].z * SMOOTHING
         ) * 10;
@@ -102,8 +101,8 @@ export default class Terrain {
     for (let i = 0; i < this.splitVertices.length; i++) {
       const addFlower =
         this.simplex.noise3D(
-          this.splitVertices[i].y / SMOOTHING,
           this.splitVertices[i].z / SMOOTHING,
+          this.splitVertices[i].y / SMOOTHING,
           this.splitVertices[i].x / SMOOTHING
         ) * 10;
       if (addFlower > 5) {
