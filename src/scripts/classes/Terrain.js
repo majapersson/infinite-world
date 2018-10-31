@@ -7,7 +7,7 @@ import {
 } from "three";
 import SimplexNoise from "simplex-noise";
 
-import { toRadians } from "../utils";
+import { toRadians, roundTwoDecimals } from "../utils";
 
 import Tree from "./Tree";
 import Flower from "./Flower";
@@ -32,13 +32,14 @@ export default class Terrain {
     );
     this.setHeight();
     this.material = new MeshPhongMaterial({
-      color: 0x00ff00,
+      color: new THREE.Color(0.225, 0.593, 0.162),
       flatShading: true,
       shininess: 0
     });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
     this.mesh.rotateX(toRadians(-90));
+    this.mesh.receiveShadow = true;
 
     this.scene = scene;
     this.treeSpread = 4;
@@ -69,7 +70,9 @@ export default class Terrain {
   }
 
   getHeightAt(x, y) {
-    return this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
+    const X = roundTwoDecimals(x);
+    const Y = roundTwoDecimals(y);
+    return this.simplex.noise2D(X / SMOOTHING, Y / SMOOTHING) * HEIGHT;
   }
 
   splitVertices() {

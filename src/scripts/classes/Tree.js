@@ -18,6 +18,13 @@ export default class Tree {
         object.position.set(position.x, position.z, -position.y);
         object.rotation.y = toRadians(Math.random() * 360);
         object.scale.set(this.scale, this.scale, this.scale);
+        object.castShadow = true;
+        object.traverse(child => {
+          if (child instanceof THREE.Mesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
         scene.add(object);
       });
     });

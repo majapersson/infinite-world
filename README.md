@@ -16,9 +16,12 @@ More details and gameplay might be added along the way.
 - [x] Generate random z values to create hills
 - [x] Look up and implement Perlin/Simplex noise
 - [x] Return z value to player
-- [ ] Randomize x and y values as well, to avoid grid feeling
-- [ ] Generate environment (flowers, trees, ponds)
-  - [ ] Randomize rotation, height and models of flowers and trees
+- [x] Randomize x and y values as well, to avoid grid feeling
+- [x] Generate environment (flowers, trees, ponds)
+  - [x] Randomize rotation, height and models of flowers and trees
+  - [x] Add content not only to vertices
+  - [ ] Create flower patch models, to cut down on rendering
+  - [ ] Don't add stuff on top of each other
 - [ ] Look into how to add vertices to existing geometry, or shift geometry to new terrain
 
 #### Player
@@ -26,6 +29,7 @@ More details and gameplay might be added along the way.
 - [x] Get y value from terrain
 - [x] Mouse movements through raycasting
 - [x] Third person view
+- [ ] Collision detection
 
 #### Camera
 
@@ -33,13 +37,20 @@ More details and gameplay might be added along the way.
 
 ### Backlog
 
+- Nicer colors and overall look
 - Continuously generated world, or world as sphere
 - Some _actual_ gameplay
 - Multiplayer support (Journey style)
 
 ### Changelog
 
+##### 2018-10-31
+
+- Added shadows to trees
+- Configured colors and randomization
+
 ##### 2018-10-30
+
 - Basic randomized addition of trees and flowers to terrain based on vertex and simplex noise
 
 ##### 2018-10-29

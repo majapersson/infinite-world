@@ -1,5 +1,4 @@
 import {
-  DirectionalLight,
   PerspectiveCamera,
   Raycaster,
   Scene,
@@ -13,7 +12,7 @@ import Flower from "./classes/Flower";
 import Tree from "./classes/Tree";
 import Player from "./classes/Player";
 import Camera from "./classes/Camera";
-import { hemiLight, dirLight } from "./classes/Lights";
+import Lights from "./classes/Lights";
 
 import { toRadians } from "./utils";
 
@@ -39,15 +38,19 @@ const camera = new PerspectiveCamera(
 camera.position.set(-2, 6, -5);
 camera.lookAt(scene.position);
 
+const lights = new Lights(camera);
+lights.add(scene);
+
 const controls = new THREE.OrbitControls(camera);
 
 export function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.gammaOutput = true;
   document.body.appendChild(renderer.domElement);
 
-  scene.add(terrain.mesh, hemiLight, dirLight, player.mesh);
+  scene.add(terrain.mesh, player.mesh);
 }
 
 export function animate() {
