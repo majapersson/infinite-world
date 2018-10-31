@@ -93,21 +93,25 @@ export default class Terrain {
           this.splitVertices[i].y * SMOOTHING,
           this.splitVertices[i].z * SMOOTHING
         ) * 10;
-      if (addTree > 4) {
-        const tree = new Tree(this.scene, this.splitVertices[i]);
+      if (addTree > 6) {
+        const tree = new Tree(this.scene, this.splitVertices[i], this.simplex);
       }
     }
   }
   addFlowers(scene) {
     for (let i = 0; i < this.splitVertices.length; i++) {
-      const addTree =
+      const addFlower =
         this.simplex.noise3D(
           this.splitVertices[i].y / SMOOTHING,
           this.splitVertices[i].z / SMOOTHING,
           this.splitVertices[i].x / SMOOTHING
         ) * 10;
-      if (addTree > 5) {
-        const flower = new Flower(this.scene, this.splitVertices[i]);
+      if (addFlower > 5) {
+        const flower = new Flower(
+          this.scene,
+          this.splitVertices[i],
+          this.simplex
+        );
       }
     }
   }
