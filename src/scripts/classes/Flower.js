@@ -15,7 +15,7 @@ export default class Flower {
       const OBJLoader = new THREE.OBJLoader();
       OBJLoader.setMaterials(materials);
       OBJLoader.load(`/assets/models/flower${this.flower}.obj`, object => {
-        object.position.set(position.x, position.z, -position.y);
+        object.position.set(position.x, position.y, position.z);
         object.rotation.y = toRadians(Math.random() * 360);
         object.scale.set(this.scale, this.scale, this.scale);
         scene.add(object);

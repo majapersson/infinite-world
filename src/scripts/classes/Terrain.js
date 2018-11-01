@@ -98,20 +98,29 @@ export default class Terrain {
       }
     }
   }
-  addFlowers(scene) {
-    for (let i = 0; i < this.splitVertices.length; i++) {
-      const addFlower =
-        this.simplex.noise3D(
-          this.splitVertices[i].z / SMOOTHING,
-          this.splitVertices[i].y / SMOOTHING,
-          this.splitVertices[i].x / SMOOTHING
-        ) * 10;
-      if (addFlower > 5) {
-        const flower = new Flower(
-          this.scene,
-          this.splitVertices[i],
-          this.simplex
-        );
+  addFlowers() {
+    const padding = 0.5;
+    for (
+      let i = -(this.segments - padding);
+      i < this.segments - padding;
+      i += 1
+    ) {
+      for (
+        let j = -(this.segments - padding);
+        j < this.segments - padding;
+        j += this.simplex.noise2D(i, j).remap(-1, 1, 1, 3)
+      ) {
+        const y = this.getHeightAt(i, j);
+        const addFlower =
+          this.simplex.noise3D(i / SMOOTHING, j / SMOOTHING, y / SMOOTHING) *
+          10;
+        if (addFlower > 5) {
+          const flower = new Flower(
+            this.mesh,
+            new Vector3(i, y, j),
+            this.simplex
+          );
+        }
       }
     }
   }
