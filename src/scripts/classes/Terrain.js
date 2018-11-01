@@ -14,20 +14,21 @@ import Flower from "./Flower";
 
 const SIZE = 50;
 const SEGMENTS = SIZE / 2;
+const SIMPLEX = new SimplexNoise(12345);
 
-const SMOOTHING = 10;
-const HEIGHT = 1;
+const HEIGHT = SIMPLEX.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
+const SMOOTHING = 10 + Math.pow(HEIGHT, 1.5);
 
 export default class Terrain {
   constructor() {
     this.size = SIZE;
     this.segments = SEGMENTS;
-    this.simplex = new SimplexNoise(12345);
+    this.simplex = SIMPLEX;
 
     this.geometry = new PlaneBufferGeometry(
       this.size,
       this.size,
-      this.segments * 1.2,
+      this.segments,
       this.segments
     );
     this.setHeight();
@@ -36,6 +37,7 @@ export default class Terrain {
       flatShading: true,
       shininess: 0
     });
+
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
     this.mesh.receiveShadow = true;
@@ -55,8 +57,8 @@ export default class Terrain {
         const x = vertices[i - 2];
         const y = vertices[i - 1];
         const z = vertices[i];
-        vertices[i - 2] += this.simplex.noise2D(y, z);
-        vertices[i] = -y + this.simplex.noise2D(x, z);
+        vertices[i - 2] += this.simplex.noise2D(y, z).remap(-1, 1, -0.5, 0.5);
+        vertices[i] = -y + this.simplex.noise2D(x, z).remap(-1, 1, -0.5, 0.5);
 
         vertices[i - 1] =
           this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
