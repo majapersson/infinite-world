@@ -56,7 +56,7 @@ export default class Terrain {
         const y = vertices[i - 1];
         const z = vertices[i];
         vertices[i - 2] += this.simplex.noise2D(y, z);
-        vertices[i] = y + this.simplex.noise2D(x, z);
+        vertices[i] = -y + this.simplex.noise2D(x, z);
 
         vertices[i - 1] =
           this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
@@ -110,6 +110,7 @@ export default class Terrain {
         j < this.segments - padding;
         j += this.simplex.noise2D(i, j).remap(-1, 1, 1, 3)
       ) {
+        j = roundTwoDecimals(j);
         const y = this.getHeightAt(i, j);
         const addFlower =
           this.simplex.noise3D(i / SMOOTHING, j / SMOOTHING, y / SMOOTHING) *
@@ -117,7 +118,7 @@ export default class Terrain {
         if (addFlower > 5) {
           const flower = new Flower(
             this.mesh,
-            new Vector3(i, y, j),
+            new Vector3(i, y, -j),
             this.simplex
           );
         }

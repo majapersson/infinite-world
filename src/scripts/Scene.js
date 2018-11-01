@@ -17,6 +17,7 @@ import Lights from "./classes/Lights";
 import { toRadians } from "./utils";
 
 const scene = new Scene();
+scene.background = new THREE.Color(0x78c9f2);
 
 const renderer = new WebGLRenderer({ antialiasing: true });
 const keymap = {};
@@ -35,7 +36,7 @@ const camera = new PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(-2, 6, -5);
+camera.position.set(-9, 15, -12);
 camera.lookAt(scene.position);
 
 const lights = new Lights(camera);

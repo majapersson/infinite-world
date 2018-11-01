@@ -18,7 +18,7 @@ export default class Player {
     this.mesh.position.y = terrainHeight + this.height;
     this.mesh.position.x = 1;
 
-    this.speed = 0.05;
+    this.speed = 0.02;
   }
 
   move(direction, terrain) {
@@ -28,7 +28,7 @@ export default class Player {
       this.mesh.translateX(direction.x * this.speed);
       this.mesh.translateZ(direction.z * this.speed);
     }
-    const y = terrain.getHeightAt(position.x, -position.z) + this.height;
+    const y = terrain.getHeightAt(position.x, position.z) + this.height;
     position.y = y;
   }
 }
