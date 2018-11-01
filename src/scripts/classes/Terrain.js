@@ -19,7 +19,7 @@ const SMOOTHING = 10;
 const HEIGHT = 1;
 
 export default class Terrain {
-  constructor(scene) {
+  constructor() {
     this.size = SIZE;
     this.segments = SEGMENTS;
     this.simplex = new SimplexNoise(12345);
@@ -38,10 +38,8 @@ export default class Terrain {
     });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
-    this.mesh.rotateX(toRadians(-90));
     this.mesh.receiveShadow = true;
 
-    this.scene = scene;
     this.treeSpread = 4;
     this.flowerSpread = 2;
     this.splitVertices();
@@ -58,9 +56,9 @@ export default class Terrain {
         const y = vertices[i - 1];
         const z = vertices[i];
         vertices[i - 2] += this.simplex.noise2D(y, z);
-        vertices[i - 1] += this.simplex.noise2D(x, z);
+        vertices[i] = y + this.simplex.noise2D(x, z);
 
-        vertices[i] =
+        vertices[i - 1] =
           this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
       }
     }
@@ -69,10 +67,10 @@ export default class Terrain {
     this.geometry.computeVertexNormals();
   }
 
-  getHeightAt(x, y) {
+  getHeightAt(x, z) {
     const X = roundTwoDecimals(x);
-    const Y = roundTwoDecimals(y);
-    return this.simplex.noise2D(X / SMOOTHING, Y / SMOOTHING) * HEIGHT;
+    const Z = roundTwoDecimals(z);
+    return this.simplex.noise2D(X / SMOOTHING, Z / SMOOTHING) * HEIGHT;
   }
 
   splitVertices() {
@@ -88,7 +86,7 @@ export default class Terrain {
     }
   }
 
-  addTrees(scene) {
+  addTrees() {
     for (let i = 0; i < this.splitVertices.length; i += this.treeSpread) {
       const addTree =
         this.simplex.noise2D(
@@ -96,7 +94,7 @@ export default class Terrain {
           this.splitVertices[i].z * SMOOTHING
         ) * 10;
       if (addTree > 6) {
-        const tree = new Tree(this.scene, this.splitVertices[i], this.simplex);
+        const tree = new Tree(this.mesh, this.splitVertices[i], this.simplex);
       }
     }
   }
