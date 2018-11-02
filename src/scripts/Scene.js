@@ -78,6 +78,14 @@ export function animate() {
 
   controls.update();
 
+  terrain.update(keymap);
+
+  player.mesh.position.y =
+    terrain.getHeightAt(
+      player.mesh.position.x + terrain.offsetX,
+      -player.mesh.position.z + terrain.offsetZ
+    ) + 1;
+
   renderer.render(scene, camera);
 }
 
