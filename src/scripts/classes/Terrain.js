@@ -43,7 +43,6 @@ export default class Terrain {
     this.mesh.receiveShadow = true;
 
     this.treeSpread = 4;
-    this.flowerSpread = 2;
     this.splitVertices();
     this.addTrees();
     this.addFlowers();
@@ -52,17 +51,15 @@ export default class Terrain {
   setHeight() {
     const vertices = this.geometry.getAttribute("position").array;
 
-    for (let i = 0; i < vertices.length; i++) {
-      if ((i + 1) % 3 === 0) {
-        const x = vertices[i - 2];
-        const y = vertices[i - 1];
-        const z = vertices[i];
-        vertices[i - 2] += this.simplex.noise2D(y, z).remap(-1, 1, -0.5, 0.5);
-        vertices[i] = -y + this.simplex.noise2D(x, z).remap(-1, 1, -0.5, 0.5);
+    for (let i = 2; i < vertices.length; i += 3) {
+      const x = vertices[i - 2];
+      const y = vertices[i - 1];
+      const z = vertices[i];
+      vertices[i - 2] += this.simplex.noise2D(y, z).remap(-1, 1, -0.5, 0.5);
+      vertices[i] = -y + this.simplex.noise2D(x, z).remap(-1, 1, -0.5, 0.5);
 
-        vertices[i - 1] =
-          this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
-      }
+      vertices[i - 1] =
+        this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
     }
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
@@ -79,12 +76,10 @@ export default class Terrain {
     const vertices = this.geometry.getAttribute("position").array;
     this.splitVertices = [];
 
-    for (let i = 0; i < vertices.length; i++) {
-      if ((i + 1) % 3 === 0) {
-        this.splitVertices.push(
-          new Vector3(vertices[i - 2], vertices[i - 1], vertices[i])
-        );
-      }
+    for (let i = 2; i < vertices.length; i += 3) {
+      this.splitVertices.push(
+        new Vector3(vertices[i - 2], vertices[i - 1], vertices[i])
+      );
     }
   }
 
