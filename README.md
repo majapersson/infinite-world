@@ -34,6 +34,7 @@ More details and gameplay might be added along the way.
 #### Camera
 
 - [ ] Only render terrain in view
+- [x] Smooth chase cam
 
 ### Backlog
 

@@ -36,13 +36,14 @@ const camera = new PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(-9, 15, -12);
+camera.position.set(0, 9, 9);
 camera.lookAt(scene.position);
 
 const lights = new Lights(camera);
 lights.add(scene);
 
 const controls = new THREE.OrbitControls(camera);
+camera.position.set(0, 15, 12);
 
 export function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -60,13 +61,19 @@ export function animate() {
   // Third person controls
   // raycaster.setFromCamera(mouse, camera);
   // const intersection = raycaster.intersectObject(terrain.mesh);
-  // let direction = new Vector3();
+  //
+  // let direction;
   // if (intersection.length > 0) {
   //   direction = intersection[0].point;
+  // } else {
+  //   const { x, y, z } = player.mesh.position;
+  //   direction = new Vector3(x, y, z);
   // }
   //
   // if (mouse.isPressed) {
   //   player.move(direction, terrain);
+  //   const { x, y, z } = player.mesh.position;
+  //   camera.position.set(x, y + 9, z + 9);
   // }
 
   controls.update();
