@@ -13,6 +13,7 @@ import Tree from "./classes/Tree";
 import Player from "./classes/Player";
 import Camera from "./classes/Camera";
 import Lights from "./classes/Lights";
+import Ray from "./classes/Ray";
 
 import { toRadians } from "./utils";
 
@@ -23,8 +24,6 @@ const renderer = new WebGLRenderer({ antialiasing: true });
 const keymap = {};
 const mouse = new Vector2();
 mouse.isPressed = false;
-
-const raycaster = new Raycaster();
 
 const terrain = new Terrain();
 
@@ -42,7 +41,9 @@ camera.lookAt(scene.position);
 const lights = new Lights(camera);
 lights.add(scene);
 
-const controls = new THREE.OrbitControls(camera);
+const raycaster = new Ray();
+
+// const controls = new THREE.OrbitControls(camera);
 camera.position.set(0, 15, 12);
 
 export function init() {
@@ -59,7 +60,8 @@ export function animate() {
   requestAnimationFrame(animate);
 
   // Third person controls
-  // raycaster.setFromCamera(mouse, camera);
+  raycaster.setFromCamera(mouse, camera);
+
   // const intersection = raycaster.intersectObject(terrain.mesh);
   //
   // let direction;
@@ -70,21 +72,26 @@ export function animate() {
   //   direction = new Vector3(x, y, z);
   // }
   //
-  // if (mouse.isPressed) {
-  //   player.move(direction, terrain);
-  //   const { x, y, z } = player.mesh.position;
-  //   camera.position.set(x, y + 9, z + 9);
-  // }
+  const distance = raycaster.getDistance(terrain, player);
 
-  controls.update();
+  if (mouse.isPressed) {
+    terrain.update(distance);
+    //   player.move(direction, terrain);
+    //   const { x, y, z } = player.mesh.position;
+    //   camera.position.set(x, y + 9, z + 9);
+  } else {
+    terrain.update();
+  }
 
-  terrain.update(keymap);
+  // controls.update();
+  player.move(distance);
+  player.update(terrain);
 
-  player.mesh.position.y =
-    terrain.getHeightAt(
-      player.mesh.position.x + terrain.offsetX,
-      -player.mesh.position.z + terrain.offsetZ
-    ) + 1;
+  // player.mesh.position.y =
+  //   terrain.getHeightAt(
+  //     player.mesh.position.x + terrain.offsetX,
+  //     -player.mesh.position.z + terrain.offsetZ
+  //   ) + 1;
 
   renderer.render(scene, camera);
 }

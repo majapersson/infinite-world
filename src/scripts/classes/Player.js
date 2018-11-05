@@ -21,14 +21,21 @@ export default class Player {
     this.speed = 0.02;
   }
 
-  move(direction, terrain) {
+  move(distance) {
     const { position } = this.mesh;
-    if (direction) {
-      direction.sub(position);
-      this.mesh.translateX(direction.x * this.speed);
-      this.mesh.translateZ(direction.z * this.speed);
+    if (distance) {
+      this.mesh.translateX(distance.x * this.speed);
+      this.mesh.translateZ(distance.z * this.speed);
     }
-    const y = terrain.getHeightAt(position.x, -position.z) + this.height;
+  }
+
+  update(terrain) {
+    const { position } = this.mesh;
+    const y =
+      terrain.getHeightAt(
+        position.x + terrain.offsetX,
+        position.z + terrain.offsetZ
+      ) + this.height;
     position.y = y;
   }
 }

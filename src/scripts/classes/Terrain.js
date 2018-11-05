@@ -46,6 +46,7 @@ export default class Terrain {
     this.splitVertices();
     this.addTrees();
     this.addFlowers();
+
     this.offsetX = 0;
     this.offsetZ = 0;
   }
@@ -125,7 +126,7 @@ export default class Terrain {
     }
   }
 
-  update(keymap) {
+  update(distance = null) {
     const vertices = this.geometry.getAttribute("position").array;
 
     for (let i = 2; i < vertices.length; i += 3) {
@@ -140,17 +141,9 @@ export default class Terrain {
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
     this.geometry.computeVertexNormals();
 
-    if (keymap[65]) {
-      this.offsetX -= 0.2;
-    }
-    if (keymap[68]) {
-      this.offsetX += 0.2;
-    }
-    if (keymap[87]) {
-      this.offsetZ -= 0.2;
-    }
-    if (keymap[83]) {
-      this.offsetZ += 0.2;
+    if (distance) {
+      this.offsetX += distance.x / 50;
+      this.offsetZ += distance.z / 50;
     }
   }
 }

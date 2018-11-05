@@ -22,7 +22,10 @@ More details and gameplay might be added along the way.
   - [x] Add content not only to vertices
   - [ ] Create flower patch models, to cut down on rendering
   - [ ] Don't add stuff on top of each other
-- [ ] Look into how to add vertices to existing geometry, or shift geometry to new terrain
+- [x] Look into how to add vertices to existing geometry, or shift geometry to new terrain
+- [x] Use raycaster to set the offset of the terrain
+- [ ] Get vegetation to move with the terrain
+- [ ] Generate new vegetation on movement
 
 #### Player
 
@@ -30,6 +33,7 @@ More details and gameplay might be added along the way.
 - [x] Mouse movements through raycasting
 - [x] Third person view
 - [ ] Collision detection
+- [ ] Find better sprite for player
 
 #### Camera
 
@@ -44,6 +48,10 @@ More details and gameplay might be added along the way.
 - Multiplayer support (Journey style)
 
 ### Changelog
+
+##### 2018-11-03
+
+- Added basic terrain generation on movement
 
 ##### 2018-10-31
 
