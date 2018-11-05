@@ -5,7 +5,6 @@ import {
   SphereGeometry,
   Vector3
 } from "three";
-import { toRadians, roundTwoDecimals } from "../utils";
 
 export default class Player {
   constructor(terrainHeight) {

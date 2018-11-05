@@ -24,7 +24,7 @@ More details and gameplay might be added along the way.
   - [ ] Don't add stuff on top of each other
 - [x] Look into how to add vertices to existing geometry, or shift geometry to new terrain
 - [x] Use raycaster to set the offset of the terrain
-- [ ] Get vegetation to move with the terrain
+- [x] Get vegetation to move with the terrain
 - [ ] Generate new vegetation on movement
 
 #### Player

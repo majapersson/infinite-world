@@ -1,5 +1,6 @@
 import {
   BufferAttribute,
+  Color,
   Mesh,
   MeshPhongMaterial,
   PlaneBufferGeometry,
@@ -33,7 +34,7 @@ export default class Terrain {
     );
     this.setHeight();
     this.material = new MeshPhongMaterial({
-      color: new THREE.Color(0.225, 0.593, 0.162),
+      color: new Color(0.225, 0.593, 0.162),
       flatShading: true,
       shininess: 0
     });
@@ -49,6 +50,7 @@ export default class Terrain {
 
     this.offsetX = 0;
     this.offsetZ = 0;
+    this.speed = 0.02;
   }
 
   setHeight() {
@@ -140,6 +142,25 @@ export default class Terrain {
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
     this.geometry.computeVertexNormals();
+
+    this.mesh.children.forEach(child => {
+      let { x, y, z } = child.position;
+
+      const offsetX = this.offsetX * this.speed;
+      const offsetZ = this.offsetZ * this.speed;
+
+      if (distance) {
+        x -= distance.x * this.speed;
+        z -= distance.z * this.speed;
+        child.position.set(
+          x,
+          this.getHeightAt(x + this.offsetX, z + this.offsetZ),
+          z
+        );
+      } else {
+        child.position.y = this.getHeightAt(x + this.offsetX, z + this.offsetZ);
+      }
+    });
 
     if (distance) {
       this.offsetX += distance.x / 50;

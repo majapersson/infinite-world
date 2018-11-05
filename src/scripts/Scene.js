@@ -1,4 +1,5 @@
 import {
+  Color,
   PerspectiveCamera,
   Raycaster,
   Scene,
@@ -18,7 +19,7 @@ import Ray from "./classes/Ray";
 import { toRadians } from "./utils";
 
 const scene = new Scene();
-scene.background = new THREE.Color(0x78c9f2);
+scene.background = new Color(0x78c9f2);
 
 const renderer = new WebGLRenderer({ antialiasing: true });
 const keymap = {};
