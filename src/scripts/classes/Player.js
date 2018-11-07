@@ -15,7 +15,6 @@ export default class Player {
     this.material = new MeshPhongMaterial({ color: 0xffff00, shininess: 0 });
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.position.y = terrainHeight + this.height;
-    this.mesh.position.x = 1;
 
     this.speed = 0.02;
   }
@@ -28,13 +27,9 @@ export default class Player {
     }
   }
 
-  update(terrain) {
+  updateHeight(world) {
     const { position } = this.mesh;
-    const y =
-      terrain.getHeightAt(
-        position.x + terrain.offsetX,
-        position.z + terrain.offsetZ
-      ) + this.height;
+    const y = world.getHeightAt(position.x, position.z) + this.height;
     position.y = y;
   }
 }

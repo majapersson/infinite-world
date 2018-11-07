@@ -11,6 +11,7 @@ import {
 import Terrain from "./classes/Terrain";
 import Flower from "./classes/Flower";
 import Tree from "./classes/Tree";
+import World from "./classes/World";
 import Player from "./classes/Player";
 import Camera from "./classes/Camera";
 import Lights from "./classes/Lights";
@@ -26,20 +27,10 @@ const keymap = {};
 const mouse = new Vector2();
 mouse.isPressed = false;
 
-const tiles = [];
-
-for (let i = -1; i < 2; i++) {
-  for (let j = -1; j < 2; j++) {
-    tiles.push(new Terrain(j, i));
-  }
-}
-
-tiles.forEach(tile => {
-  scene.add(tile.mesh);
-});
+const world = new World();
 
 // Third person view
-const player = new Player();
+const player = new Player(world.getHeightAt(0, 0));
 const camera = new PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -65,6 +56,7 @@ export function init() {
   document.body.appendChild(renderer.domElement);
 
   scene.add(player.mesh);
+  world.addTo(scene);
 }
 
 export function animate() {
@@ -75,9 +67,10 @@ export function animate() {
   const distance = raycaster.getDistance(scene, player);
 
   if (mouse.isPressed) {
-    //   player.move(direction, terrain);
-    //   const { x, y, z } = player.mesh.position;
-    //   camera.position.set(x, y + 9, z + 9);
+    player.move(distance);
+    player.updateHeight(world);
+    const { x, y, z } = player.mesh.position;
+    camera.position.set(x, y + 9, z + 9);
   }
 
   // controls.update();

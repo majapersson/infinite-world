@@ -15,16 +15,15 @@ import Flower from "./Flower";
 
 const SIZE = 50;
 const SEGMENTS = SIZE / 2;
-const SIMPLEX = new SimplexNoise(12345);
-
-const HEIGHT = SIMPLEX.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
-const SMOOTHING = 10 + Math.pow(HEIGHT, 1.5);
 
 export default class Terrain {
-  constructor(x, z) {
+  constructor(x, z, simplex) {
     this.size = SIZE;
     this.segments = SEGMENTS;
-    this.simplex = SIMPLEX;
+    this.simplex = simplex;
+    this.height = simplex.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
+    this.smoothing = 10 + Math.pow(this.height, 2);
+
     this.offsetX = this.size * x;
     this.offsetZ = this.size * z;
 
@@ -51,8 +50,6 @@ export default class Terrain {
     this.addTrees();
     this.addFlowers();
 
-    this.offsetX = 0;
-    this.offsetZ = 0;
     this.speed = 0.02;
   }
 
@@ -68,9 +65,9 @@ export default class Terrain {
 
       vertices[i - 1] =
         this.simplex.noise2D(
-          (x + this.offsetX) / SMOOTHING,
-          (-y + this.offsetZ) / SMOOTHING
-        ) * HEIGHT;
+          (x + this.offsetX) / this.smoothing,
+          (-y + this.offsetZ) / this.smoothing
+        ) * this.height;
     }
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
@@ -80,7 +77,9 @@ export default class Terrain {
   getHeightAt(x, z) {
     const X = roundTwoDecimals(x);
     const Z = roundTwoDecimals(z);
-    return this.simplex.noise2D(X / SMOOTHING, Z / SMOOTHING) * HEIGHT;
+    return (
+      this.simplex.noise2D(X / this.smoothing, Z / this.smoothing) * this.height
+    );
   }
 
   splitVertices() {
@@ -98,8 +97,8 @@ export default class Terrain {
     for (let i = 0; i < this.splitVertices.length; i += this.treeSpread) {
       const addTree =
         this.simplex.noise2D(
-          this.splitVertices[i].y * SMOOTHING,
-          this.splitVertices[i].z * SMOOTHING
+          this.splitVertices[i].y * this.smoothing,
+          this.splitVertices[i].z * this.smoothing
         ) * 10;
       if (addTree > 6) {
         const tree = new Tree(this.mesh, this.splitVertices[i], this.simplex);
@@ -121,8 +120,11 @@ export default class Terrain {
         j = roundTwoDecimals(j);
         const y = this.getHeightAt(i, j);
         const addFlower =
-          this.simplex.noise3D(i / SMOOTHING, j / SMOOTHING, y / SMOOTHING) *
-          10;
+          this.simplex.noise3D(
+            i / this.smoothing,
+            j / this.smoothing,
+            y / this.smoothing
+          ) * 10;
         if (addFlower > 5) {
           const flower = new Flower(
             this.mesh,
@@ -143,7 +145,8 @@ export default class Terrain {
       const z = vertices[i] + this.offsetZ;
 
       vertices[i - 1] =
-        this.simplex.noise2D(x / SMOOTHING, z / SMOOTHING) * HEIGHT;
+        this.simplex.noise2D(x / this.smoothing, z / this.smoothing) *
+        this.height;
     }
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
