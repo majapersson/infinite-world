@@ -25,7 +25,7 @@ More details and gameplay might be added along the way.
 - [x] Create world class with global world functions
 - [x] Generate nine terrain tiles
 - [x] Calculate if tiles are too far away and should be removed
-- [ ] Generate new terrain tiles
+- [x] Generate new terrain tiles
 - [ ] Smooth adding and removing of tiles (distance?)
 
 #### Player

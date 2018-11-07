@@ -15,9 +15,9 @@ export default class World {
     this.tileCount = 9;
     this.tiles = [];
 
-    for (let i = -1; i < 2; i++) {
-      for (let j = -1; j < 2; j++) {
-        this.tiles.push(new Terrain(j, i, this.simplex));
+    for (let xOffset = -1; xOffset < 2; xOffset++) {
+      for (let zOffset = -1; zOffset < 2; zOffset++) {
+        this.tiles.push(new Terrain(xOffset, zOffset, this.simplex));
       }
     }
   }
@@ -40,7 +40,7 @@ export default class World {
     this.removeTiles(position, scene);
 
     if (this.tiles.length < this.tileCount) {
-      this.addTiles();
+      this.addTiles(position, scene);
     }
   }
 
@@ -68,5 +68,36 @@ export default class World {
     this.tiles = keepTiles;
   }
 
-  addTiles() {}
+  addTiles(position, scene) {
+    const currentTerrain = {
+      x: Math.round(position.x / SIZE),
+      z: Math.round(position.z / SIZE)
+    };
+
+    for (
+      let xOffset = currentTerrain.x - 1;
+      xOffset < currentTerrain.x + 2;
+      xOffset++
+    ) {
+      for (
+        let zOffset = currentTerrain.z - 1;
+        zOffset < currentTerrain.z + 2;
+        zOffset++
+      ) {
+        if (
+          this.tiles.some(tile => {
+            return tile.offsetX === xOffset && tile.offsetZ === zOffset;
+          })
+        ) {
+          //
+        } else {
+          this.tiles.push(new Terrain(xOffset, zOffset, this.simplex));
+        }
+      }
+    }
+
+    this.tiles.forEach(tile => {
+      scene.add(tile.mesh);
+    });
+  }
 }

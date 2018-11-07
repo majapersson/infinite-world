@@ -24,8 +24,8 @@ export default class Terrain {
     this.height = simplex.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
     this.smoothing = 10 + Math.pow(this.height, 2);
 
-    this.offsetX = this.size * x;
-    this.offsetZ = this.size * z;
+    this.offsetX = x;
+    this.offsetZ = z;
 
     this.geometry = new PlaneBufferGeometry(
       this.size,
@@ -43,7 +43,11 @@ export default class Terrain {
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
     this.mesh.receiveShadow = true;
-    this.mesh.position.set(this.offsetX, 0, this.offsetZ);
+    this.mesh.position.set(
+      this.size * this.offsetX,
+      0,
+      this.size * this.offsetZ
+    );
 
     this.treeSpread = 4;
     this.splitVertices();
@@ -65,8 +69,8 @@ export default class Terrain {
 
       vertices[i - 1] =
         this.simplex.noise2D(
-          (x + this.offsetX) / this.smoothing,
-          (-y + this.offsetZ) / this.smoothing
+          (x + this.size * this.offsetX) / this.smoothing,
+          (-y + this.size * this.offsetZ) / this.smoothing
         ) * this.height;
     }
 
