@@ -6,27 +6,29 @@ import {
   PlaneBufferGeometry,
   Vector3
 } from "three";
-import SimplexNoise from "simplex-noise";
-
-import { roundTwoDecimals } from "../utils";
 
 import Tree from "./Tree";
 import Flower from "./Flower";
 
-const SIZE = 50;
-const SEGMENTS = SIZE / 2;
-
 export default class Terrain {
-  constructor(x, z, simplex) {
-    this.size = SIZE;
-    this.segments = SEGMENTS;
-    this.simplex = simplex;
-    this.height = simplex.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
-    this.smoothing = 10 + Math.pow(this.height, 2);
+  constructor(x, z, settings) {
+    // Terrain generation variables
+    this.size = settings.size;
+    this.segments = settings.segments;
+    this.simplex = settings.simplex;
+    this.height = settings.height;
+    this.smoothing = settings.smoothing;
 
+    // Positioning
     this.offsetX = x;
     this.offsetZ = z;
+    this.position = new Vector3(
+      this.size * this.offsetX,
+      0,
+      this.size * this.offsetZ
+    );
 
+    // Geometry
     this.geometry = new PlaneBufferGeometry(
       this.size,
       this.size,
@@ -34,29 +36,30 @@ export default class Terrain {
       this.segments
     );
     this.setHeight();
+
+    // Material
     this.material = new MeshPhongMaterial({
       color: new Color(0.225, 0.593, 0.162),
       flatShading: true,
       shininess: 0
     });
 
+    // Mesh
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
     this.mesh.receiveShadow = true;
-    this.mesh.position.set(
-      this.size * this.offsetX,
-      0,
-      this.size * this.offsetZ
-    );
+    this.mesh.position.set(this.position.x, 0, this.position.z);
 
-    this.treeSpread = 4;
-    this.splitVertices();
-    this.addTrees();
-    this.addFlowers();
-
-    this.speed = 0.02;
+    // Content
+    // this.treeSpread = 4;
+    // this.splitVertices();
+    // this.addTrees();
+    // this.addFlowers();
   }
 
+  /*
+  * Loop over every vertex in the geometry, set y values to Z position and generate new Y value
+  */
   setHeight() {
     const vertices = this.geometry.getAttribute("position").array;
 
@@ -78,12 +81,16 @@ export default class Terrain {
     this.geometry.computeVertexNormals();
   }
 
-  getHeightAt(x, z) {
-    const X = roundTwoDecimals(x);
-    const Z = roundTwoDecimals(z);
-    return (
-      this.simplex.noise2D(X / this.smoothing, Z / this.smoothing) * this.height
-    );
+  /*
+  * Check to see if terrain is too far from player
+  */
+  shouldBeRemoved(position) {
+    const isOutLeft = this.position.x < position.x - this.size;
+    const isOutRight = this.position.x > position.x + this.size;
+    const isOutTop = this.position.z < position.z - this.size;
+    const isOutBottom = this.position.z > position.z + this.size;
+
+    return isOutLeft || isOutRight || isOutTop || isOutBottom;
   }
 
   splitVertices() {
@@ -109,6 +116,7 @@ export default class Terrain {
       }
     }
   }
+
   addFlowers() {
     const padding = 0.5;
     for (
@@ -137,47 +145,6 @@ export default class Terrain {
           );
         }
       }
-    }
-  }
-
-  update(distance = null) {
-    const vertices = this.geometry.getAttribute("position").array;
-
-    for (let i = 2; i < vertices.length; i += 3) {
-      const x = vertices[i - 2] + this.offsetX;
-      const y = vertices[i - 1];
-      const z = vertices[i] + this.offsetZ;
-
-      vertices[i - 1] =
-        this.simplex.noise2D(x / this.smoothing, z / this.smoothing) *
-        this.height;
-    }
-
-    this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
-    this.geometry.computeVertexNormals();
-
-    this.mesh.children.forEach(child => {
-      let { x, y, z } = child.position;
-
-      const offsetX = this.offsetX * this.speed;
-      const offsetZ = this.offsetZ * this.speed;
-
-      if (distance) {
-        x -= distance.x * this.speed;
-        z -= distance.z * this.speed;
-        child.position.set(
-          x,
-          this.getHeightAt(x + this.offsetX, z + this.offsetZ),
-          z
-        );
-      } else {
-        child.position.y = this.getHeightAt(x + this.offsetX, z + this.offsetZ);
-      }
-    });
-
-    if (distance) {
-      this.offsetX += distance.x / 50;
-      this.offsetZ += distance.z / 50;
     }
   }
 }

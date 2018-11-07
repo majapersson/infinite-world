@@ -14,8 +14,6 @@ import Camera from "./classes/Camera";
 import Lights from "./classes/Lights";
 import Ray from "./classes/Ray";
 
-import { toRadians } from "./utils";
-
 const scene = new Scene();
 scene.background = new Color(0x78c9f2);
 
