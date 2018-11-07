@@ -17,16 +17,19 @@ More details and gameplay might be added along the way.
 - [x] Look up and implement Perlin/Simplex noise
 - [x] Return z value to player
 - [x] Randomize x and y values as well, to avoid grid feeling
-- [x] Generate environment (flowers, trees, ponds)
-  - [x] Randomize rotation, height and models of flowers and trees
-  - [x] Add content not only to vertices
-  - [ ] Create tree- and flower meshes, to cut down on rendering
-  - [ ] Don't add stuff on top of each other
 - [x] Create world class with global world functions
 - [x] Generate nine terrain tiles
 - [x] Calculate if tiles are too far away and should be removed
 - [x] Generate new terrain tiles
-- [ ] Smooth adding and removing of tiles (distance?)
+- [ ] Smooth adding and removing of tiles (distance/fog?)
+
+#### Content
+
+- [x] Generate environment (flowers, trees, ponds)
+- [x] Randomize rotation, height and models of flowers and trees
+- [x] Add content not only to vertices
+- [ ] Create tree- and flower meshes, to cut down on rendering
+- [ ] Don't add stuff on top of each other
 
 #### Player
 
