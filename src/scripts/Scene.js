@@ -26,10 +26,20 @@ const keymap = {};
 const mouse = new Vector2();
 mouse.isPressed = false;
 
-const terrain = new Terrain();
+const tiles = [];
+
+for (let i = -1; i < 2; i++) {
+  for (let j = -1; j < 2; j++) {
+    tiles.push(new Terrain(j, i));
+  }
+}
+
+tiles.forEach(tile => {
+  scene.add(tile.mesh);
+});
 
 // Third person view
-const player = new Player(terrain.getHeightAt(0, 0));
+const player = new Player();
 const camera = new PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -54,7 +64,7 @@ export function init() {
   renderer.gammaOutput = true;
   document.body.appendChild(renderer.domElement);
 
-  scene.add(terrain.mesh, player.mesh);
+  scene.add(player.mesh);
 }
 
 export function animate() {
@@ -62,37 +72,15 @@ export function animate() {
 
   // Third person controls
   raycaster.setFromCamera(mouse, camera);
-
-  // const intersection = raycaster.intersectObject(terrain.mesh);
-  //
-  // let direction;
-  // if (intersection.length > 0) {
-  //   direction = intersection[0].point;
-  // } else {
-  //   const { x, y, z } = player.mesh.position;
-  //   direction = new Vector3(x, y, z);
-  // }
-  //
-  const distance = raycaster.getDistance(terrain, player);
+  const distance = raycaster.getDistance(scene, player);
 
   if (mouse.isPressed) {
-    terrain.update(distance);
     //   player.move(direction, terrain);
     //   const { x, y, z } = player.mesh.position;
     //   camera.position.set(x, y + 9, z + 9);
-  } else {
-    terrain.update();
   }
 
   // controls.update();
-  player.move(distance);
-  player.update(terrain);
-
-  // player.mesh.position.y =
-  //   terrain.getHeightAt(
-  //     player.mesh.position.x + terrain.offsetX,
-  //     -player.mesh.position.z + terrain.offsetZ
-  //   ) + 1;
 
   renderer.render(scene, camera);
 }

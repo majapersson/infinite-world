@@ -8,7 +8,7 @@ import {
 } from "three";
 import SimplexNoise from "simplex-noise";
 
-import { toRadians, roundTwoDecimals } from "../utils";
+import { roundTwoDecimals } from "../utils";
 
 import Tree from "./Tree";
 import Flower from "./Flower";
@@ -21,10 +21,12 @@ const HEIGHT = SIMPLEX.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
 const SMOOTHING = 10 + Math.pow(HEIGHT, 1.5);
 
 export default class Terrain {
-  constructor() {
+  constructor(x, z) {
     this.size = SIZE;
     this.segments = SEGMENTS;
     this.simplex = SIMPLEX;
+    this.offsetX = this.size * x;
+    this.offsetZ = this.size * z;
 
     this.geometry = new PlaneBufferGeometry(
       this.size,
@@ -42,6 +44,7 @@ export default class Terrain {
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.name = "Terrain";
     this.mesh.receiveShadow = true;
+    this.mesh.position.set(this.offsetX, 0, this.offsetZ);
 
     this.treeSpread = 4;
     this.splitVertices();
@@ -60,11 +63,14 @@ export default class Terrain {
       const x = vertices[i - 2];
       const y = vertices[i - 1];
       const z = vertices[i];
-      vertices[i - 2] += this.simplex.noise2D(y, z).remap(-1, 1, -0.5, 0.5);
-      vertices[i] = -y + this.simplex.noise2D(x, z).remap(-1, 1, -0.5, 0.5);
+      // vertices[i - 2] += this.simplex.noise2D(y, z).remap(-1, 1, -0.5, 0.5);
+      vertices[i] = -y;
 
       vertices[i - 1] =
-        this.simplex.noise2D(x / SMOOTHING, y / SMOOTHING) * HEIGHT;
+        this.simplex.noise2D(
+          (x + this.offsetX) / SMOOTHING,
+          (-y + this.offsetZ) / SMOOTHING
+        ) * HEIGHT;
     }
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
