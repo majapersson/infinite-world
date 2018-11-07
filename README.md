@@ -20,12 +20,13 @@ More details and gameplay might be added along the way.
 - [x] Generate environment (flowers, trees, ponds)
   - [x] Randomize rotation, height and models of flowers and trees
   - [x] Add content not only to vertices
-  - [ ] Create flower patch models, to cut down on rendering
+  - [ ] Create tree- and flower meshes, to cut down on rendering
   - [ ] Don't add stuff on top of each other
-- [x] Look into how to add vertices to existing geometry, or shift geometry to new terrain
-- [x] Use raycaster to set the offset of the terrain
-- [x] Get vegetation to move with the terrain
-- [ ] Generate new vegetation on movement
+- [x] Create world class with global world functions
+- [x] Generate nine terrain tiles
+- [x] Calculate if tiles are too far away and should be removed
+- [ ] Generate new terrain tiles
+- [ ] Smooth adding and removing of tiles (distance?)
 
 #### Player
 
@@ -45,9 +46,17 @@ More details and gameplay might be added along the way.
 - Nicer colors and overall look
 - Continuously generated world, or world as sphere
 - Some _actual_ gameplay
-- Multiplayer support (Journey style)
 
 ### Changelog
+
+##### 2018-11-07
+
+- Refactored tiles into World object for global world functions and terrain calculations
+- Calculated if tiles should be removed
+
+##### 2018-11-05
+
+- Ditched moving terrain, focusing on chunks/tiles instead
 
 ##### 2018-11-03
 

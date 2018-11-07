@@ -8,9 +8,6 @@ import {
   WebGLRenderer
 } from "three";
 
-import Terrain from "./classes/Terrain";
-import Flower from "./classes/Flower";
-import Tree from "./classes/Tree";
 import World from "./classes/World";
 import Player from "./classes/Player";
 import Camera from "./classes/Camera";
@@ -72,6 +69,7 @@ export function animate() {
     const { x, y, z } = player.mesh.position;
     camera.position.set(x, y + 9, z + 9);
   }
+  world.update(player.mesh.position, scene);
 
   // controls.update();
 
