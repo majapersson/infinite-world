@@ -105,6 +105,7 @@ export default class Terrain {
   }
 
   addTrees() {
+    const treePositions = [];
     for (let i = 0; i < this.splitVertices.length; i += this.treeSpread) {
       const addTree =
         this.simplex.noise2D(
@@ -112,9 +113,10 @@ export default class Terrain {
           this.splitVertices[i].z * this.smoothing
         ) * 10;
       if (addTree > 6) {
-        const tree = new Tree(this.mesh, this.splitVertices[i], this.simplex);
+        treePositions.push(this.splitVertices[i]);
       }
     }
+    return treePositions;
   }
 
   addFlowers() {

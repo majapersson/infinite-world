@@ -1,6 +1,8 @@
+import { Mesh, Vector3, Scene } from "three";
 import SimplexNoise from "simplex-noise";
 
 import Terrain from "./Terrain";
+import Tree from "./Tree";
 
 import { roundTwoDecimals } from "../utils";
 
@@ -9,11 +11,13 @@ const SEGMENTS = SIZE / 2;
 
 export default class World {
   constructor() {
-    this.simplex = new SimplexNoise();
+    this.simplex = new SimplexNoise(12345);
     this.height = this.simplex.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
     this.smoothing = 10 + Math.pow(this.height, 2);
     this.tileCount = 9;
     this.tiles = [];
+    console.log(this.loadTrees());
+    // this.treeModels = this.loadTrees();
 
     this.settings = {
       size: SIZE,
@@ -25,7 +29,11 @@ export default class World {
 
     for (let xOffset = -1; xOffset < 2; xOffset++) {
       for (let zOffset = -1; zOffset < 2; zOffset++) {
-        this.tiles.push(new Terrain(xOffset, zOffset, this.settings));
+        // const treeMesh = this.generateTreeMesh();
+        // console.log(treeMesh);
+        const tile = new Terrain(xOffset, zOffset, this.settings);
+        // tile.mesh.add(treeMesh);
+        this.tiles.push(tile);
       }
     }
   }
@@ -57,7 +65,7 @@ export default class World {
     this.removeTiles(position, scene);
 
     if (this.tiles.length < this.tileCount) {
-      this.addTiles(position, scene);
+      this.addTiles(position);
       this.addTo(scene);
     }
   }
@@ -99,5 +107,69 @@ export default class World {
         }
       }
     }
+  }
+
+  async loadTrees() {
+    const treeIndexes = 3;
+    const models = [];
+    for (let i = 0; i < treeIndexes; i++) {
+      const model = await this.loadModel(`tree${i + 1}`);
+      console.log(model);
+    }
+    return models;
+  }
+
+  loadModel(file) {
+    return new Promise((resolve, reject) => {
+      try {
+        const MTLLoader = new THREE.MTLLoader();
+        MTLLoader.load(`/assets/models/${file}.mtl`, materials => {
+          materials.preload();
+
+          const OBJLoader = new THREE.OBJLoader();
+          OBJLoader.setMaterials(materials);
+          OBJLoader.load(`/assets/models/${file}.obj`, object => {
+            object.name = file;
+            object.castShadow = true;
+            object.traverse(child => {
+              if (child instanceof Mesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+              }
+            });
+            resolve(object);
+          });
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  generateTreeMesh() {
+    const padding = 0.5;
+    const treePositions = [];
+    for (let i = -(SEGMENTS - padding); i < SEGMENTS - padding; i += 6) {
+      for (
+        let j = -(SEGMENTS - padding);
+        j < SEGMENTS - padding;
+        j += this.simplex.noise2D(i, j).remap(-1, 1, 1, 3)
+      ) {
+        j = roundTwoDecimals(j);
+        const y = this.getHeightAt(i, j);
+        const addTree =
+          this.simplex.noise3D(
+            i / this.smoothing,
+            j / this.smoothing,
+            y / this.smoothing
+          ) * 10;
+        if (addTree > 6) {
+          treePositions.push(new Vector3(i, y, j));
+        }
+      }
+    }
+    const tree = new Tree(this.treeModels);
+
+    tree.addTrees(treePositions, this.simplex);
   }
 }
