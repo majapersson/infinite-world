@@ -4,6 +4,7 @@ import SimplexNoise from "simplex-noise";
 import Loader from "./Loader";
 import Terrain from "./Terrain";
 import Tree from "./Tree";
+import Flower from "./Flower";
 
 import { roundTwoDecimals } from "../utils";
 
@@ -17,7 +18,11 @@ export default class World {
     this.smoothing = 10 + Math.pow(this.height, 2);
     this.tileCount = 9;
     this.tiles = [];
-    this.treeModels = this.loadTrees();
+    this.treeCount = 3;
+    this.treeModels = [];
+    this.flowerCount = 3;
+    this.flowerModels = [];
+    this.loadModels();
 
     this.settings = {
       size: SIZE,
@@ -51,11 +56,25 @@ export default class World {
           )
         ) {
           const tile = new Terrain(xOffset, zOffset, this.settings);
-          const treeMesh = this.generateTreeMesh(
+          const treeMesh = this.generateMesh(
             tile.position.x,
-            tile.position.z
+            tile.position.z,
+            6,
+            6,
+            "tree"
           );
+          const flowerMesh = this.generateMesh(
+            tile.position.x,
+            tile.position.z,
+            1,
+            5,
+            "flower"
+          );
+
           treeMesh.children.forEach(child => {
+            tile.mesh.add(child);
+          });
+          flowerMesh.children.forEach(child => {
             tile.mesh.add(child);
           });
 
@@ -80,7 +99,11 @@ export default class World {
   update(position, scene) {
     this.removeTiles(position, scene);
 
-    if (this.tiles.length < this.tileCount && this.treeModels) {
+    if (
+      this.tiles.length < this.tileCount &&
+      this.treeModels.length &&
+      this.flowerModels.length
+    ) {
       this.addTiles(position);
       this.addTo(scene);
     }
@@ -116,41 +139,59 @@ export default class World {
     this.generateTerrain(currentTile.x, currentTile.z);
   }
 
-  async loadTrees() {
-    const treeIndexes = 3;
-    const models = [];
-    for (let i = 0; i < treeIndexes; i++) {
-      const model = await new Loader().loadModel(`tree${i + 1}`);
-      models.push(model);
+  /*
+  * Utilizes Loader to load model files
+  */
+  async loadModels() {
+    const loader = new Loader();
+
+    for (let i = 1; i <= this.treeCount; i++) {
+      const model = await loader.loadModel(`tree${i}`);
+      this.treeModels.push(model);
     }
-    return models;
+
+    for (let i = 1; i <= this.flowerCount; i++) {
+      const model = await loader.loadModel(`flower${i}`);
+      this.flowerModels.push(model);
+    }
   }
 
-  generateTreeMesh(x, z) {
+  /*
+  * Generate positions for mesh content and creates mesh
+  */
+  generateMesh(x, z, density, spread, type) {
     const padding = 0.5;
-    const treePositions = [];
-    for (let i = -SIZE / 2; i < SIZE / 2; i += 6) {
+    const positions = [];
+    let mesh;
+
+    for (let i = -SIZE / 2; i < SIZE / 2; i += spread) {
       for (
         let j = -SIZE / 2;
         j < SIZE / 2;
-        j += this.simplex.noise2D(i, j).remap(-1, 1, 1, 3)
+        j += this.simplex.noise2D(i, j).remap(-1, 1, 0, spread)
       ) {
         const y = this.getHeightAt(i + x, j + z);
-        const addTree =
+        const add =
           this.simplex.noise3D(
-            i + z / this.smoothing,
-            j + z / this.smoothing,
+            i / this.smoothing,
+            j / this.smoothing,
             y / this.smoothing
           ) * 10;
-        if (addTree > 6) {
-          treePositions.push(new Vector3(i, y, j));
+        if (add > density) {
+          positions.push(new Vector3(i, y, j));
         }
       }
     }
-    const tree = new Tree(this.treeModels);
 
-    tree.addTrees(treePositions, this.simplex);
+    if (type === "tree") {
+      mesh = new Tree(this.treeModels);
+      mesh.addTrees(positions, this.simplex);
+    }
+    if (type === "flower") {
+      mesh = new Flower(this.flowerModels);
+      mesh.addFlowers(positions, this.simplex);
+    }
 
-    return tree;
+    return mesh;
   }
 }

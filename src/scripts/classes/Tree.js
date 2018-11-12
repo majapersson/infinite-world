@@ -17,7 +17,9 @@ export default class Tree extends Object3D {
       );
       const tree = this.models[index].clone();
       tree.position.set(position.x, position.y, position.z);
-      tree.rotation.y = toRadians(Math.random() * 360);
+      tree.rotation.y = toRadians(
+        simplex.noise2D(position.y, position.z) * 360
+      );
       tree.scale.set(scale, scale, scale);
       this.add(tree);
     });
