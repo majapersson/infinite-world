@@ -15,12 +15,10 @@ export default class Tree extends Object3D {
       const index = Math.floor(
         simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3)
       );
-      console.log(this.models);
-      const tree = this.models[index].copy();
+      const tree = this.models[index].clone();
       tree.position.set(position.x, position.y, position.z);
       tree.rotation.y = toRadians(Math.random() * 360);
       tree.scale.set(scale, scale, scale);
-
       this.add(tree);
     });
   }
