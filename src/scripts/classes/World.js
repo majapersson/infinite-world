@@ -13,7 +13,7 @@ const SEGMENTS = SIZE / 2;
 
 export default class World {
   constructor() {
-    this.simplex = new SimplexNoise(12345);
+    this.simplex = new SimplexNoise();
     this.height = 15;
     this.smoothing = 30;
     this.tileCount = 9;
@@ -65,17 +65,17 @@ export default class World {
             6,
             "tree"
           );
-          const flowerMesh = this.generateMesh(
-            tile.position.x,
-            tile.position.z,
-            1,
-            4,
-            "flower"
-          );
-
           treeMesh.children.forEach(child => {
             tile.mesh.add(child);
           });
+
+          const flowerMesh = this.generateMesh(
+            tile.position.x,
+            tile.position.z,
+            0.75,
+            4,
+            "flower"
+          );
           flowerMesh.children.forEach(child => {
             tile.mesh.add(child);
           });

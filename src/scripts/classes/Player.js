@@ -7,14 +7,16 @@ import {
 } from "three";
 
 export default class Player {
-  constructor(terrainHeight) {
+  constructor(world) {
     this.radius = 0.5;
     this.height = 0.5;
     this.segments = 10;
     this.geometry = new SphereGeometry(this.radius, this.segments);
     this.material = new MeshPhongMaterial({ color: 0xffff00, shininess: 0 });
     this.mesh = new Mesh(this.geometry, this.material);
-    this.mesh.position.y = terrainHeight + this.height;
+    this.mesh.position.y =
+      world.getHeightAt(this.mesh.position.x, this.mesh.position.z) +
+      this.height;
 
     this.speed = 0.02;
   }

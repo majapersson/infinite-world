@@ -1,5 +1,6 @@
 import {
   Color,
+  PCFSoftShadowMap,
   PerspectiveCamera,
   Raycaster,
   Scene,
@@ -25,15 +26,13 @@ mouse.isPressed = false;
 const world = new World();
 
 // Third person view
-const player = new Player(world.getHeightAt(0, 0));
-const camera = new PerspectiveCamera(
+const player = new Player(world);
+const camera = new Camera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-camera.position.set(0, 9, 9);
-camera.lookAt(scene.position);
 
 const lights = new Lights(camera);
 lights.add(scene);
@@ -41,12 +40,11 @@ lights.add(scene);
 const raycaster = new Ray();
 
 // const controls = new THREE.OrbitControls(camera);
-camera.position.set(0, 15, 12);
 
 export function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = PCFSoftShadowMap;
   renderer.gammaOutput = true;
   document.body.appendChild(renderer.domElement);
 
@@ -64,9 +62,9 @@ export function animate() {
   if (mouse.isPressed) {
     player.move(distance);
     player.updateHeight(world);
-    const { x, y, z } = player.mesh.position;
-    camera.position.set(x, y + 9, z + 9);
   }
+
+  camera.update(player.mesh.position);
   world.update(player.mesh.position, scene);
 
   // controls.update();

@@ -1,5 +1,4 @@
-import { Mesh, Object3D, Vector3 } from "three";
-import { toRadians } from "../utils";
+import { Math as ThreeMath, Mesh, Object3D, Vector3 } from "three";
 
 export default class Flower extends Object3D {
   constructor(models) {
@@ -17,7 +16,7 @@ export default class Flower extends Object3D {
       );
       const flower = this.models[index].clone();
       flower.position.set(position.x, position.y, position.z);
-      flower.rotation.y = toRadians(
+      flower.rotation.y = ThreeMath.degToRad(
         simplex.noise2D(position.y, position.z) * 360
       );
       flower.scale.set(scale, scale, scale);

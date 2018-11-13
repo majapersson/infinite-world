@@ -1,6 +1,7 @@
 import {
   BufferAttribute,
   Color,
+  Math as ThreeMath,
   Mesh,
   MeshPhongMaterial,
   PlaneBufferGeometry,
@@ -97,7 +98,7 @@ export default class Terrain {
     });
     const water = new Mesh(geometry, material);
     water.position.y = this.waterLevel;
-    water.rotation.x = THREE.Math.degToRad(-90);
+    water.rotation.x = ThreeMath.degToRad(-90);
     this.mesh.add(water);
   }
 
