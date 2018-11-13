@@ -6,7 +6,7 @@ import Terrain from "./Terrain";
 import Tree from "./Tree";
 import Flower from "./Flower";
 
-import { roundTwoDecimals } from "../utils";
+import { roundTwoDecimals, layeredNoise } from "../utils";
 
 const SIZE = 50;
 const SEGMENTS = SIZE / 2;
@@ -40,9 +40,10 @@ export default class World {
   getHeightAt(x, z) {
     const X = roundTwoDecimals(x);
     const Z = roundTwoDecimals(z);
-    return (
-      this.simplex.noise2D(X / this.smoothing, Z / this.smoothing) * this.height
-    );
+    // return (
+    //   this.simplex.noise2D(X / this.smoothing, Z / this.smoothing) * this.height
+    // );
+    return layeredNoise(x, z, this.simplex);
   }
 
   /*
@@ -60,7 +61,7 @@ export default class World {
           const treeMesh = this.generateMesh(
             tile.position.x,
             tile.position.z,
-            6,
+            5,
             6,
             "tree"
           );
@@ -68,7 +69,7 @@ export default class World {
             tile.position.x,
             tile.position.z,
             1,
-            5,
+            4,
             "flower"
           );
 
@@ -100,11 +101,7 @@ export default class World {
   update(position, scene) {
     this.removeTiles(position, scene);
 
-    if (
-      this.tiles.length < this.tileCount &&
-      this.treeModels.length &&
-      this.flowerModels.length
-    ) {
+    if (this.tiles.length < this.tileCount) {
       this.addTiles(position);
       this.addTo(scene);
     }
@@ -161,25 +158,34 @@ export default class World {
   * Generate positions for mesh content and creates mesh
   */
   generateMesh(x, z, density, spread, type) {
-    const padding = 0.5;
+    const size = SIZE / 2;
     const positions = [];
     let mesh;
 
-    for (let i = -SIZE / 2; i < SIZE / 2; i += spread) {
+    for (let i = -size; i < size; i += spread) {
       for (
-        let j = -SIZE / 2;
-        j < SIZE / 2;
+        let j = -size;
+        j < size;
         j += this.simplex.noise2D(i, j).remap(-1, 1, 0, spread)
       ) {
         const y = this.getHeightAt(i + x, j + z);
-        const add =
-          this.simplex.noise3D(
-            i / this.smoothing,
-            j / this.smoothing,
-            y / this.smoothing
-          ) * 10;
-        if (add > density) {
-          positions.push(new Vector3(i, y, j));
+        if (y > this.settings.waterLevel && y < -this.settings.waterLevel) {
+          let add;
+          if (type === "tree") {
+            add =
+              this.simplex.noise2D(i / this.smoothing, j / this.smoothing) * 10;
+          }
+          if (type === "flower") {
+            add =
+              this.simplex.noise3D(
+                i / this.smoothing,
+                y / this.smoothing,
+                j / this.smoothing
+              ) * 10;
+          }
+          if (add > density) {
+            positions.push(new Vector3(i, y, j));
+          }
         }
       }
     }

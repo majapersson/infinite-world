@@ -22,13 +22,15 @@ More details and gameplay might be added along the way.
 - [x] Calculate if tiles are too far away and should be removed
 - [x] Generate new terrain tiles
 - [ ] Smooth adding and removing of tiles (distance/fog?)
+- [ ] Tweak layered noise for better terrain generation
 
 #### Content
 
 - [x] Generate environment (flowers, trees, ponds)
 - [x] Randomize rotation, height and models of flowers and trees
 - [x] Add content not only to vertices
-- [ ] Create tree- and flower meshes, to cut down on rendering
+- [x] Create tree- and flower meshes, to cut down on rendering
+- [ ] Turn meshes into instance buffers or use object pooling
 - [ ] Don't add stuff on top of each other
 
 #### Player
@@ -51,6 +53,15 @@ More details and gameplay might be added along the way.
 - Some _actual_ gameplay
 
 ### Changelog
+
+##### 2018-11-12
+
+- Vegetation meshes added, but very sensitive and a bit buggy
+- Added layered noise function, needs to be tweaked
+
+##### 2018-11-09
+
+- Started on vegetation meshes
 
 ##### 2018-11-07
 
