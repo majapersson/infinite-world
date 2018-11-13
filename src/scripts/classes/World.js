@@ -14,8 +14,8 @@ const SEGMENTS = SIZE / 2;
 export default class World {
   constructor() {
     this.simplex = new SimplexNoise(12345);
-    this.height = this.simplex.noise2D(SIZE, SEGMENTS).remap(-1, 1, 1, 5);
-    this.smoothing = 10 + Math.pow(this.height, 2);
+    this.height = 15;
+    this.smoothing = 30;
     this.tileCount = 9;
     this.tiles = [];
     this.treeCount = 3;
