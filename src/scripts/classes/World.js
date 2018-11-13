@@ -29,7 +29,8 @@ export default class World {
       segments: SEGMENTS,
       simplex: this.simplex,
       height: this.height,
-      smoothing: this.smoothing
+      smoothing: this.smoothing,
+      waterLevel: -4
     };
   }
 

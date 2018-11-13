@@ -18,6 +18,7 @@ export default class Terrain {
     this.simplex = settings.simplex;
     this.height = settings.height;
     this.smoothing = settings.smoothing;
+    this.waterLevel = settings.waterLevel;
 
     // Positioning
     this.offsetX = x;
@@ -50,6 +51,8 @@ export default class Terrain {
     this.mesh.receiveShadow = true;
     this.mesh.position.set(this.position.x, 0, this.position.z);
 
+    this.addWater();
+
     // Content
     // this.treeSpread = 4;
     // this.splitVertices();
@@ -79,6 +82,28 @@ export default class Terrain {
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
     this.geometry.computeVertexNormals();
+  }
+
+  /*
+  * Add water plane
+  */
+  addWater() {
+    const geometry = new PlaneBufferGeometry(
+      this.size,
+      this.size,
+      this.segments,
+      this.segments
+    );
+
+    const material = new MeshPhongMaterial({
+      color: 0x0000ff,
+      flatShading: true,
+      shininess: 100
+    });
+    const water = new Mesh(geometry, material);
+    water.position.y = this.waterLevel;
+    water.rotation.x = THREE.Math.degToRad(-90);
+    this.mesh.add(water);
   }
 
   /*

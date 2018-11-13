@@ -29,7 +29,11 @@ export default class Player {
 
   updateHeight(world) {
     const { position } = this.mesh;
-    const y = world.getHeightAt(position.x, position.z) + this.height;
-    position.y = y;
+    const y = world.getHeightAt(position.x, position.z);
+    if (y < world.settings.waterLevel) {
+      position.y = world.settings.waterLevel + this.height * 2;
+    } else {
+      position.y = y + this.height;
+    }
   }
 }
