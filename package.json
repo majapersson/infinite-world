@@ -5,9 +5,11 @@
     "build": "npm-run-all --parallel build:*",
     "build:scripts": "rollup --config --environment NODE_ENV:production",
     "build:styles": "node-sass src/styles/index.scss public/assets/styles/index.css",
+    "deploy": "npm-run-all build gh-pages",
+    "gh-pages": "gh-pages -d public",
+    "start": "npm-run-all --parallel browser watch:*",
     "watch:scripts": "rollup --config --watch",
-    "watch:styles": "node-sass -w src/styles/index.scss public/assets/styles/index.css",
-    "start": "npm-run-all --parallel browser watch:*"
+    "watch:styles": "node-sass -w src/styles/index.scss public/assets/styles/index.css"
   },
   "dependencies": {
     "@babel/core": "^7.1.5",
@@ -24,5 +26,8 @@
     "rollup-plugin-uglify": "^6.0.0",
     "simplex-noise": "^2.4.0",
     "three": "^0.97.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
 }

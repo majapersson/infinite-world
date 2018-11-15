@@ -5,12 +5,12 @@ export default class Loader {
     return new Promise((resolve, reject) => {
       try {
         const MTLLoader = new THREE.MTLLoader();
-        MTLLoader.load(`/assets/models/${file}.mtl`, materials => {
+        MTLLoader.load(`./assets/models/${file}.mtl`, materials => {
           materials.preload();
 
           const OBJLoader = new THREE.OBJLoader();
           OBJLoader.setMaterials(materials);
-          OBJLoader.load(`/assets/models/${file}.obj`, object => {
+          OBJLoader.load(`./assets/models/${file}.obj`, object => {
             object.name = file;
             object.castShadow = true;
             object.traverse(child => {
