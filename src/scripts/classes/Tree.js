@@ -1,12 +1,7 @@
 import { Math as ThreeMath, Mesh, Object3D, Vector3 } from "three";
 
 export default class Tree extends Object3D {
-  constructor(models) {
-    super();
-    this.models = models;
-  }
-
-  addTrees(positions, simplex) {
+  addTrees(positions, simplex, models) {
     positions.forEach(position => {
       const scale = simplex
         .noise2D(position.y, position.z)
@@ -14,14 +9,20 @@ export default class Tree extends Object3D {
       const index = Math.floor(
         simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3)
       );
-      const tree = this.models[index].clone();
+      const model = models[index].children[0];
+      const tree = new Mesh(model.geometry, model.material);
       tree.position.set(position.x, position.y, position.z);
       tree.rotation.y = ThreeMath.degToRad(
         simplex.noise2D(position.y, position.z) * 360
       );
       tree.scale.set(scale, scale, scale);
-      tree.castShadow = true;
-      tree.receiveShadow = true;
+      tree.traverse(child => {
+        if (child instanceof Mesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+
       this.add(tree);
     });
   }

@@ -61,24 +61,21 @@ export default class World {
           const treeMesh = this.generateMesh(
             tile.position.x,
             tile.position.z,
-            5,
-            6,
+            10,
+            4,
             "tree"
           );
-          treeMesh.children.forEach(child => {
-            tile.mesh.add(child);
-          });
+          treeMesh.castShadow = true;
+          tile.mesh.add(treeMesh);
 
           const flowerMesh = this.generateMesh(
             tile.position.x,
             tile.position.z,
-            0.75,
-            4,
+            2,
+            3,
             "flower"
           );
-          flowerMesh.children.forEach(child => {
-            tile.mesh.add(child);
-          });
+          tile.mesh.add(flowerMesh);
 
           this.tiles.push(tile);
         }
@@ -91,7 +88,11 @@ export default class World {
   */
   addTo(scene) {
     this.tiles.forEach(tile => {
-      scene.add(tile.mesh);
+      const existingObject = scene.getObjectByName(tile.mesh.name);
+
+      if (!existingObject) {
+        scene.add(tile.mesh);
+      }
     });
   }
 
@@ -157,33 +158,39 @@ export default class World {
   /*
   * Generate positions for mesh content and creates mesh
   */
-  generateMesh(x, z, density, spread, type) {
+  generateMesh(x, z, spread, density, type) {
     const size = SIZE / 2;
     const positions = [];
     let mesh;
 
-    for (let i = -size; i < size; i += spread) {
+    for (
+      let i = -size;
+      i < size;
+      i += this.simplex.noise2D(x, z).remap(-1, 1, spread / 3, spread)
+    ) {
       for (
         let j = -size;
         j < size;
-        j += this.simplex.noise2D(i, j).remap(-1, 1, 0, spread)
+        j += this.simplex.noise2D(i, j).remap(-1, 1, spread / 2, spread)
       ) {
         const y = this.getHeightAt(i + x, j + z);
         if (y > this.settings.waterLevel && y < -this.settings.waterLevel) {
           let add;
           if (type === "tree") {
-            add =
-              this.simplex.noise2D(i / this.smoothing, j / this.smoothing) * 10;
+            add = this.simplex
+              .noise2D(i / this.smoothing, j / this.smoothing)
+              .remap(-1, 1, 0, 10);
           }
           if (type === "flower") {
-            add =
-              this.simplex.noise3D(
+            add = this.simplex
+              .noise3D(
                 i / this.smoothing,
                 y / this.smoothing,
                 j / this.smoothing
-              ) * 10;
+              )
+              .remap(-1, 1, 0, 10);
           }
-          if (add > density) {
+          if (add < density) {
             positions.push(new Vector3(i, y, j));
           }
         }
@@ -191,8 +198,8 @@ export default class World {
     }
 
     if (type === "tree") {
-      mesh = new Tree(this.treeModels);
-      mesh.addTrees(positions, this.simplex);
+      mesh = new Tree();
+      mesh.addTrees(positions, this.simplex, this.treeModels);
     }
     if (type === "flower") {
       mesh = new Flower(this.flowerModels);

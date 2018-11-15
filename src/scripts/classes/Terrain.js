@@ -50,7 +50,7 @@ export default class Terrain {
 
     // Mesh
     this.mesh = new Mesh(this.geometry, this.material);
-    this.mesh.name = "Terrain";
+    this.mesh.name = `${this.offsetX}:${this.offsetZ}`;
     this.mesh.receiveShadow = true;
     this.mesh.position.set(this.position.x, 0, this.position.z);
 
