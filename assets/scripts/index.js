@@ -53583,11 +53583,11 @@
 	      return new Promise(function (resolve, reject) {
 	        try {
 	          var MTLLoader = new THREE.MTLLoader();
-	          MTLLoader.load("../assets/models/".concat(file, ".mtl"), function (materials) {
+	          MTLLoader.load("./assets/models/".concat(file, ".mtl"), function (materials) {
 	            materials.preload();
 	            var OBJLoader = new THREE.OBJLoader();
 	            OBJLoader.setMaterials(materials);
-	            OBJLoader.load("../assets/models/".concat(file, ".obj"), function (object) {
+	            OBJLoader.load("./assets/models/".concat(file, ".obj"), function (object) {
 	              object.name = file;
 	              object.castShadow = true;
 	              object.traverse(function (child) {
