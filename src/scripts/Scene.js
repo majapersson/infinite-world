@@ -19,6 +19,16 @@ const scene = new Scene();
 scene.background = new Color(0x78c9f2);
 
 const renderer = new WebGLRenderer({ antialiasing: true });
+
+const stats = new Stats();
+const callPanel = stats.addPanel(new Stats.Panel("Calls", "#ff8", "#221"));
+const geometryPanel = stats.addPanel(
+  new Stats.Panel("Geometries", "#ff8", "#221")
+);
+stats.domElement.style.position = "absolute";
+stats.domElement.style.top = "0";
+document.body.appendChild(stats.domElement);
+
 const keymap = {};
 const mouse = new Vector2();
 mouse.isPressed = false;
@@ -68,7 +78,9 @@ export function animate() {
   world.update(player.mesh.position, scene);
 
   // controls.update();
-
+  callPanel.update(renderer.info.render.calls, 460);
+  geometryPanel.update(renderer.info.memory.geometries, 460);
+  stats.update();
   renderer.render(scene, camera);
 }
 
