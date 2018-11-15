@@ -72,7 +72,7 @@ export default class World {
             tile.position.x,
             tile.position.z,
             2,
-            3,
+            2,
             "flower"
           );
           tile.mesh.add(flowerMesh);
@@ -203,7 +203,7 @@ export default class World {
     }
     if (type === "flower") {
       mesh = new Flower(this.flowerModels);
-      mesh.addFlowers(positions, this.simplex);
+      mesh.addFlowers(positions, this.simplex, this.flowerModels);
     }
 
     return mesh;

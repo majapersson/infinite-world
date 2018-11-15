@@ -60,7 +60,7 @@ export default class Terrain {
   /*
   * Loop over every vertex in the geometry, set y values to Z position and generate new Y value
   */
-  setHeight(settings) {
+  setHeight() {
     const vertices = this.geometry.getAttribute("position").array;
 
     for (let i = 2; i < vertices.length; i += 3) {
@@ -91,14 +91,32 @@ export default class Terrain {
       this.segments
     );
 
+    const vertices = geometry.getAttribute("position").array;
+
+    for (let i = 2; i < vertices.length; i += 3) {
+      const x = vertices[i - 2];
+      const y = vertices[i - 1];
+      const z = vertices[i];
+      vertices[i] = -y;
+
+      vertices[i - 1] =
+        this.simplex.noise2D(
+          x + this.size * this.offsetX,
+          -y + this.size * this.offsetZ
+        ) * 0.5;
+    }
+
+    geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+    geometry.computeVertexNormals();
+
     const material = new MeshPhongMaterial({
-      color: 0x0000ff,
+      color: new Color(0, 0.73, 0.831),
       flatShading: true,
       shininess: 100
     });
     const water = new Mesh(geometry, material);
     water.position.y = this.waterLevel;
-    water.rotation.x = ThreeMath.degToRad(-90);
+    // water.rotation.x = ThreeMath.degToRad(-90);
     this.mesh.add(water);
   }
 

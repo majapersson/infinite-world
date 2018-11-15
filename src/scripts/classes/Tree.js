@@ -22,6 +22,8 @@ export default class Tree extends Object3D {
           child.receiveShadow = true;
         }
       });
+      tree.castShadow = true;
+      tree.receiveShadow = true;
 
       this.add(tree);
     });

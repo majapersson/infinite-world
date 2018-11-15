@@ -1,12 +1,7 @@
 import { Math as ThreeMath, Mesh, Object3D, Vector3 } from "three";
 
 export default class Flower extends Object3D {
-  constructor(models) {
-    super();
-    this.models = models;
-  }
-
-  addFlowers(positions, simplex) {
+  addFlowers(positions, simplex, models) {
     positions.forEach(position => {
       const scale = simplex
         .noise2D(position.y, position.z)
@@ -14,7 +9,8 @@ export default class Flower extends Object3D {
       const index = Math.floor(
         simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3)
       );
-      const flower = this.models[index].clone();
+      const model = models[index].children[0];
+      const flower = new Mesh(model.geometry, model.material);
       flower.position.set(position.x, position.y, position.z);
       flower.rotation.y = ThreeMath.degToRad(
         simplex.noise2D(position.y, position.z) * 360

@@ -9,7 +9,7 @@ export default class Lights {
 
     this.dirLight = new DirectionalLight(0xffffff, 0.7);
     this.dirLight.color.setHSL(0.1, 1, 0.95);
-    this.dirLight.position.set(-1, 1, 1);
+    this.dirLight.position.set(1, 1, -1);
     this.dirLight.position.multiplyScalar(30);
     this.dirLight.castShadow = true;
     this.dirLight.shadow.camera.top = camera.fov;
