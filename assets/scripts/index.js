@@ -53639,6 +53639,8 @@
 	            child.receiveShadow = true;
 	          }
 	        });
+	        tree.castShadow = true;
+	        tree.receiveShadow = true;
 
 	        _this.add(tree);
 	      });
@@ -53661,10 +53663,6 @@
 
 	  _createClass(Flower, [{
 	    key: "addFlowers",
-	    // constructor(models) {
-	    //   super();
-	    //   this.models = models;
-	    // }
 	    value: function addFlowers(positions, simplex, models) {
 	      var _this = this;
 
@@ -53749,7 +53747,7 @@
 
 	  _createClass(Terrain, [{
 	    key: "setHeight",
-	    value: function setHeight(settings) {
+	    value: function setHeight() {
 	      var vertices = this.geometry.getAttribute("position").array;
 
 	      for (var i = 2; i < vertices.length; i += 3) {
@@ -53771,14 +53769,26 @@
 	    key: "addWater",
 	    value: function addWater() {
 	      var geometry = new PlaneBufferGeometry(this.size, this.size, this.segments, this.segments);
+	      var vertices = geometry.getAttribute("position").array;
+
+	      for (var i = 2; i < vertices.length; i += 3) {
+	        var x = vertices[i - 2];
+	        var y = vertices[i - 1];
+	        var z = vertices[i];
+	        vertices[i] = -y;
+	        vertices[i - 1] = this.simplex.noise2D(x + this.size * this.offsetX, -y + this.size * this.offsetZ) * 0.5;
+	      }
+
+	      geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+	      geometry.computeVertexNormals();
 	      var material = new MeshPhongMaterial({
-	        color: 0x0000ff,
+	        color: new Color(0, 0.73, 0.831),
 	        flatShading: true,
 	        shininess: 100
 	      });
 	      var water = new Mesh(geometry, material);
-	      water.position.y = this.waterLevel;
-	      water.rotation.x = _Math.degToRad(-90);
+	      water.position.y = this.waterLevel; // water.rotation.x = ThreeMath.degToRad(-90);
+
 	      this.mesh.add(water);
 	    }
 	    /*
@@ -53790,7 +53800,7 @@
 	    value: function shouldBeRemoved(position) {
 	      var isOutLeft = this.position.x < position.x - this.size;
 	      var isOutRight = this.position.x > position.x + this.size;
-	      var isOutTop = this.position.z < position.z - this.size;
+	      var isOutTop = this.position.z < position.z - this.size * 2;
 	      var isOutBottom = this.position.z > position.z + this.size;
 	      return isOutLeft || isOutRight || isOutTop || isOutBottom;
 	    }
@@ -53869,7 +53879,7 @@
 	          }
 	        };
 
-	        for (var zOffset = z - 1; zOffset < z + 2; zOffset++) {
+	        for (var zOffset = z - 2; zOffset < z + 1; zOffset++) {
 	          _loop2(zOffset);
 	        }
 	      };
@@ -53921,20 +53931,9 @@
 	        return !tile.shouldBeRemoved(position);
 	      });
 	      removeTiles.forEach(function (tile) {
-	        scene.remove(tile.mesh); // tile.mesh.traverse(child => {
-	        //   if (child instanceof Mesh) {
-	        //     if (child.geometry) {
-	        //       child.geometry.dispose();
-	        //     }
-	        //     if (child.material) {
-	        //       if (child.material.length) {
-	        //         child.material.forEach(material => material.dispose());
-	        //       } else {
-	        //         child.material.dispose();
-	        //       }
-	        //     }
-	        //   }
-	        // });
+	        scene.remove(tile.mesh);
+	        tile.mesh.geometry.dispose();
+	        tile.mesh.material.dispose();
 	      });
 	      this.tiles = keepTiles;
 	    }
@@ -54155,7 +54154,7 @@
 	    this.hemiLight.position.set(0, 10, 0);
 	    this.dirLight = new DirectionalLight(0xffffff, 0.7);
 	    this.dirLight.color.setHSL(0.1, 1, 0.95);
-	    this.dirLight.position.set(-1, 1, 1);
+	    this.dirLight.position.set(1, 1, -1);
 	    this.dirLight.position.multiplyScalar(30);
 	    this.dirLight.castShadow = true;
 	    this.dirLight.shadow.camera.top = camera.fov;
