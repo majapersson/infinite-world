@@ -54281,6 +54281,9 @@
 	window.addEventListener("mousemove", moveMouse);
 	window.addEventListener("mousedown", handleClick);
 	window.addEventListener("mouseup", handleClick);
+	window.addEventListener("touchstart", handleClick);
+	window.addEventListener("touchend", handleClick);
+	window.addEventListener("touchmove", moveMouse);
 
 	init();
 	animate();
