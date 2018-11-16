@@ -9,7 +9,7 @@ export default class Flower extends Object3D {
       const index = Math.floor(
         simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3)
       );
-      const model = models[index].children[0];
+      const model = models[index];
       const flower = new Mesh(model.geometry, model.material);
       flower.position.set(position.x, position.y, position.z);
       flower.rotation.y = ThreeMath.degToRad(

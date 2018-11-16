@@ -19,7 +19,7 @@ export default class Loader {
                 child.receiveShadow = true;
               }
             });
-            resolve(object);
+            resolve(object.children[0]);
           });
         });
       } catch (error) {

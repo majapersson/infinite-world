@@ -124,9 +124,9 @@ export default class Terrain {
   * Check to see if terrain is too far from player
   */
   shouldBeRemoved(position) {
-    const isOutLeft = this.position.x < position.x - this.size;
-    const isOutRight = this.position.x > position.x + this.size;
-    const isOutTop = this.position.z < position.z - this.size;
+    const isOutLeft = this.position.x < position.x - this.size * 1.5;
+    const isOutRight = this.position.x > position.x + this.size * 1.5;
+    const isOutTop = this.position.z < position.z - this.size * 2.5;
     const isOutBottom = this.position.z > position.z + this.size;
 
     return isOutLeft || isOutRight || isOutTop || isOutBottom;

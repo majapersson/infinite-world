@@ -29,7 +29,6 @@ stats.domElement.style.position = "absolute";
 stats.domElement.style.top = "0";
 document.body.appendChild(stats.domElement);
 
-const keymap = {};
 const mouse = new Vector2();
 mouse.isPressed = false;
 
@@ -84,14 +83,6 @@ export function animate() {
   renderer.render(scene, camera);
 }
 
-function keyDown(e) {
-  keymap[e.keyCode] = true;
-}
-
-function keyUp(e) {
-  keymap[e.keyCode] = false;
-}
-
 function moveMouse(event) {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -101,8 +92,9 @@ function handleClick() {
   mouse.isPressed = !mouse.isPressed;
 }
 
-window.addEventListener("keydown", keyDown);
-window.addEventListener("keyup", keyUp);
 window.addEventListener("mousemove", moveMouse);
 window.addEventListener("mousedown", handleClick);
 window.addEventListener("mouseup", handleClick);
+window.addEventListener("touchstart", handleClick);
+window.addEventListener("touchend", handleClick);
+window.addEventListener("touchmove", moveMouse);

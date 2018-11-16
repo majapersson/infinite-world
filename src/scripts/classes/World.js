@@ -51,7 +51,7 @@ export default class World {
   */
   generateTerrain(x, z) {
     for (let xOffset = x - 1; xOffset < x + 2; xOffset++) {
-      for (let zOffset = z - 1; zOffset < z + 2; zOffset++) {
+      for (let zOffset = z - 2; zOffset < z + 1; zOffset++) {
         if (
           !this.tiles.some(
             tile => tile.offsetX === xOffset && tile.offsetZ === zOffset
@@ -102,7 +102,7 @@ export default class World {
   update(position, scene) {
     this.removeTiles(position, scene);
 
-    if (this.tiles.length < this.tileCount) {
+    if (this.tiles.length < this.tileCount && this.treeModels.length > 0) {
       this.addTiles(position);
       this.addTo(scene);
     }
@@ -121,6 +121,9 @@ export default class World {
 
     removeTiles.forEach(tile => {
       scene.remove(tile.mesh);
+
+      tile.mesh.geometry.dispose();
+      tile.mesh.material.dispose();
     });
 
     this.tiles = keepTiles;
@@ -196,7 +199,6 @@ export default class World {
         }
       }
     }
-
     if (type === "tree") {
       mesh = new Tree();
       mesh.addTrees(positions, this.simplex, this.treeModels);
@@ -205,7 +207,6 @@ export default class World {
       mesh = new Flower(this.flowerModels);
       mesh.addFlowers(positions, this.simplex, this.flowerModels);
     }
-
     return mesh;
   }
 }

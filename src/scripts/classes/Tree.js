@@ -9,7 +9,7 @@ export default class Tree extends Object3D {
       const index = Math.floor(
         simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3)
       );
-      const model = models[index].children[0];
+      const model = models[index];
       const tree = new Mesh(model.geometry, model.material);
       tree.position.set(position.x, position.y, position.z);
       tree.rotation.y = ThreeMath.degToRad(
