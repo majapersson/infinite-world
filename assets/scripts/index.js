@@ -53625,6 +53625,7 @@
 	    value: function addTrees(positions, simplex, models) {
 	      var _this = this;
 
+	      var geometry = new BufferGeometry();
 	      positions.forEach(function (position) {
 	        var scale = simplex.noise2D(position.y, position.z).remap(-1, 1, 0.9, 1.2);
 	        var index = Math.floor(simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3));
@@ -53800,8 +53801,8 @@
 	    value: function shouldBeRemoved(position) {
 	      var isOutLeft = this.position.x < position.x - this.size * 1.5;
 	      var isOutRight = this.position.x > position.x + this.size * 1.5;
-	      var isOutTop = this.position.z < position.z - this.size * 2.5;
-	      var isOutBottom = this.position.z > position.z + this.size;
+	      var isOutTop = this.position.z < position.z - this.size * 1.5;
+	      var isOutBottom = this.position.z > position.z + this.size * 1.5;
 	      return isOutLeft || isOutRight || isOutTop || isOutBottom;
 	    }
 	  }, {
@@ -53840,7 +53841,7 @@
 	    this.smoothing = 30;
 	    this.tileCount = 9;
 	    this.tiles = [];
-	    this.treeCount = 3;
+	    this.treeCount = 4;
 	    this.treeModels = [];
 	    this.flowerCount = 3;
 	    this.flowerModels = [];
@@ -53862,9 +53863,6 @@
 	  _createClass(World, [{
 	    key: "getHeightAt",
 	    value: function getHeightAt(x, z) {
-	      //   this.simplex.noise2D(X / this.smoothing, Z / this.smoothing) * this.height
-	      // );
-
 	      return layeredNoise(x, z, this.simplex);
 	    }
 	    /*
@@ -53881,7 +53879,6 @@
 	          if (!_this.tiles.some(function (tile) {
 	            return tile.offsetX === xOffset && tile.offsetZ === zOffset;
 	          })) {
-	            // console.log("new mesh");
 	            var tile = new Terrain(xOffset, zOffset, _this.settings);
 
 	            var treeMesh = _this.generateMesh(tile.position.x, tile.position.z, 10, 4, "tree");
@@ -53897,7 +53894,7 @@
 	          }
 	        };
 
-	        for (var zOffset = z - 2; zOffset < z + 1; zOffset++) {
+	        for (var zOffset = z - 1; zOffset < z + 2; zOffset++) {
 	          _loop2(zOffset);
 	        }
 	      };
