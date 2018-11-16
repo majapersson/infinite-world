@@ -1,7 +1,7 @@
 import resolve from "rollup-plugin-node-resolve";
 import babel from "rollup-plugin-babel";
 import commonjs from "rollup-plugin-commonjs";
-import uglify from "rollup-plugin-uglify";
+import terser from "rollup-plugin-terser";
 
 export default {
   input: "src/scripts/index.js",
@@ -15,6 +15,7 @@ export default {
     babel({
       exclude: "node_modules/**"
     }),
-    commonjs()
+    commonjs(),
+    process.env.NODE_ENV === "production" && terser()
   ]
 };
