@@ -98,11 +98,11 @@ export function animate() {
   requestAnimationFrame(animate);
 
   // Third person controls
-  raycaster.setFromCamera(mouse, camera);
-  const distance = raycaster.getDistance(scene, player);
+  // raycaster.setFromCamera(mouse, camera);
+  // const distance = raycaster.getDistance(scene, player);
 
   if (mouse.isPressed) {
-    player.move(distance);
+    player.move(mouse);
     player.updateHeight(world);
   }
 
@@ -115,9 +115,15 @@ export function animate() {
   renderer.render(scene, camera);
 }
 
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 function moveMouse(event) {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  mouse.x = event.clientX / window.innerWidth;
+  mouse.y = event.clientY / window.innerHeight;
 }
 
 function handleClick() {
@@ -130,3 +136,4 @@ window.addEventListener("mouseup", handleClick);
 window.addEventListener("touchstart", handleClick);
 window.addEventListener("touchend", handleClick);
 window.addEventListener("touchmove", moveMouse);
+window.addEventListener("resize", onWindowResize, false);

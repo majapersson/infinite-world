@@ -14,24 +14,18 @@ export default class Player {
     this.light = new PointLight(0xffc107, 0.7, 10, 2);
     this.mesh.add(this.light);
 
-    this.speed = 0.02;
+    this.speed = 0.5;
   }
 
   addTo(scene) {
     scene.add(this.mesh, this.mesh);
   }
 
-  move(distance) {
+  move(mouse) {
     const { position } = this.mesh;
-    if (distance) {
-      let velocityX = distance.x * this.speed;
-      let velocityZ = distance.z * this.speed;
-      if (velocityZ < -1) {
-        velocityZ = -1;
-      }
-      this.mesh.translateX(velocityX);
-      this.mesh.translateZ(velocityZ);
-    }
+
+    this.mesh.translateX(mouse.x.remap(0, 1, -this.speed, this.speed));
+    this.mesh.translateZ(mouse.y.remap(0, 1, -this.speed, this.speed));
   }
 
   updateHeight(world) {
