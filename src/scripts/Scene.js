@@ -97,10 +97,6 @@ export function init() {
 export function animate() {
   requestAnimationFrame(animate);
 
-  // Third person controls
-  // raycaster.setFromCamera(mouse, camera);
-  // const distance = raycaster.getDistance(scene, player);
-
   if (mouse.isPressed) {
     player.move(mouse);
     player.updateHeight(world);
