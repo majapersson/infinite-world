@@ -43,9 +43,10 @@ export default class Terrain {
 
     // Material
     this.material = new MeshPhongMaterial({
-      color: new Color(0.225, 0.593, 0.162),
+      // color: new Color(0.225, 0.593, 0.162),
       flatShading: true,
-      shininess: 0
+      shininess: 0,
+      vertexColors: THREE.VertexColors
     });
 
     // Mesh
@@ -62,6 +63,9 @@ export default class Terrain {
   */
   setHeight() {
     const vertices = this.geometry.getAttribute("position").array;
+    const groundColor = { r: 0.225, g: 0.593, b: 0.162 };
+    const mountainColor = { r: 0.346, g: 0.143, b: 0.072 };
+    const colors = [];
 
     for (let i = 2; i < vertices.length; i += 3) {
       const x = vertices[i - 2];
@@ -74,9 +78,18 @@ export default class Terrain {
         -y + this.size * this.offsetZ,
         this.simplex
       );
+      if (vertices[i - 1] > -this.waterLevel * 1.5) {
+        colors.push(mountainColor.r, mountainColor.g, mountainColor.b);
+      } else {
+        colors.push(groundColor.r, groundColor.g, groundColor.b);
+      }
     }
 
     this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+    this.geometry.addAttribute(
+      "color",
+      new BufferAttribute(new Float32Array(colors), 3)
+    );
     this.geometry.computeVertexNormals();
   }
 
@@ -130,5 +143,20 @@ export default class Terrain {
     const isOutBottom = this.position.z > position.z + this.size * 1.5;
 
     return isOutLeft || isOutRight || isOutTop || isOutBottom;
+  }
+
+  removeChildren() {
+    this.mesh.traverse(child => {
+      if (child instanceof Mesh) {
+        child.geometry.dispose();
+        if (child.material.length) {
+          child.material.forEach(material => {
+            material.dispose();
+          });
+        } else {
+          child.material.dispose();
+        }
+      }
+    });
   }
 }

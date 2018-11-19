@@ -36,9 +36,6 @@ export default class World {
   getHeightAt(x, z) {
     const X = roundTwoDecimals(x);
     const Z = roundTwoDecimals(z);
-    // return (
-    //   this.simplex.noise2D(X / this.smoothing, Z / this.smoothing) * this.height
-    // );
     return layeredNoise(x, z, this.simplex);
   }
 
@@ -58,7 +55,7 @@ export default class World {
             tile.position.x,
             tile.position.z,
             10,
-            4,
+            3,
             "tree"
           );
           treeMesh.castShadow = true;
@@ -68,7 +65,7 @@ export default class World {
             tile.position.x,
             tile.position.z,
             2,
-            2,
+            1.5,
             "flower"
           );
           tile.mesh.add(flowerMesh);
@@ -98,7 +95,7 @@ export default class World {
   update(position, scene) {
     this.removeTiles(position, scene);
 
-    if (this.tiles.length < this.tileCount && this.treeModels.length > 0) {
+    if (this.tiles.length < this.tileCount) {
       this.addTiles(position);
       this.addTo(scene);
     }
