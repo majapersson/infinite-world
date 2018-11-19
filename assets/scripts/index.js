@@ -5823,6 +5823,111 @@
 
 	commonjsGlobal._babelPolyfill = true;
 
+	function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+	  try {
+	    var info = gen[key](arg);
+	    var value = info.value;
+	  } catch (error) {
+	    reject(error);
+	    return;
+	  }
+
+	  if (info.done) {
+	    resolve(value);
+	  } else {
+	    Promise.resolve(value).then(_next, _throw);
+	  }
+	}
+
+	function _asyncToGenerator(fn) {
+	  return function () {
+	    var self = this,
+	        args = arguments;
+	    return new Promise(function (resolve, reject) {
+	      var gen = fn.apply(self, args);
+
+	      function _next(value) {
+	        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+	      }
+
+	      function _throw(err) {
+	        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+	      }
+
+	      _next(undefined);
+	    });
+	  };
+	}
+
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+
+	function _defineProperties(target, props) {
+	  for (var i = 0; i < props.length; i++) {
+	    var descriptor = props[i];
+	    descriptor.enumerable = descriptor.enumerable || false;
+	    descriptor.configurable = true;
+	    if ("value" in descriptor) descriptor.writable = true;
+	    Object.defineProperty(target, descriptor.key, descriptor);
+	  }
+	}
+
+	function _createClass(Constructor, protoProps, staticProps) {
+	  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+	  if (staticProps) _defineProperties(Constructor, staticProps);
+	  return Constructor;
+	}
+
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function");
+	  }
+
+	  subClass.prototype = Object.create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) _setPrototypeOf(subClass, superClass);
+	}
+
+	function _getPrototypeOf(o) {
+	  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+	    return o.__proto__ || Object.getPrototypeOf(o);
+	  };
+	  return _getPrototypeOf(o);
+	}
+
+	function _setPrototypeOf(o, p) {
+	  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+	    o.__proto__ = p;
+	    return o;
+	  };
+
+	  return _setPrototypeOf(o, p);
+	}
+
+	function _assertThisInitialized(self) {
+	  if (self === void 0) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }
+
+	  return self;
+	}
+
+	function _possibleConstructorReturn(self, call) {
+	  if (call && (typeof call === "object" || typeof call === "function")) {
+	    return call;
+	  }
+
+	  return _assertThisInitialized(self);
+	}
+
 	// Polyfills
 
 	if ( Number.EPSILON === undefined ) {
@@ -52994,110 +53099,44 @@
 
 	};
 
-	function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-	  try {
-	    var info = gen[key](arg);
-	    var value = info.value;
-	  } catch (error) {
-	    reject(error);
-	    return;
+	var Loader$1 =
+	/*#__PURE__*/
+	function () {
+	  function Loader$$1() {
+	    _classCallCheck(this, Loader$$1);
 	  }
 
-	  if (info.done) {
-	    resolve(value);
-	  } else {
-	    Promise.resolve(value).then(_next, _throw);
-	  }
-	}
-
-	function _asyncToGenerator(fn) {
-	  return function () {
-	    var self = this,
-	        args = arguments;
-	    return new Promise(function (resolve, reject) {
-	      var gen = fn.apply(self, args);
-
-	      function _next(value) {
-	        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-	      }
-
-	      function _throw(err) {
-	        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-	      }
-
-	      _next(undefined);
-	    });
-	  };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _defineProperties(target, props) {
-	  for (var i = 0; i < props.length; i++) {
-	    var descriptor = props[i];
-	    descriptor.enumerable = descriptor.enumerable || false;
-	    descriptor.configurable = true;
-	    if ("value" in descriptor) descriptor.writable = true;
-	    Object.defineProperty(target, descriptor.key, descriptor);
-	  }
-	}
-
-	function _createClass(Constructor, protoProps, staticProps) {
-	  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-	  if (staticProps) _defineProperties(Constructor, staticProps);
-	  return Constructor;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function");
-	  }
-
-	  subClass.prototype = Object.create(superClass && superClass.prototype, {
-	    constructor: {
-	      value: subClass,
-	      writable: true,
-	      configurable: true
+	  _createClass(Loader$$1, [{
+	    key: "loadModel",
+	    value: function loadModel(file) {
+	      return new Promise(function (resolve, reject) {
+	        try {
+	          var MTLLoader = new THREE.MTLLoader();
+	          MTLLoader.load("./assets/models/".concat(file, ".mtl"), function (materials) {
+	            materials.preload();
+	            var OBJLoader = new THREE.OBJLoader();
+	            OBJLoader.setMaterials(materials);
+	            OBJLoader.load("./assets/models/".concat(file, ".obj"), function (object) {
+	              object.name = file;
+	              object.castShadow = true;
+	              object.traverse(function (child) {
+	                if (child instanceof Mesh) {
+	                  child.castShadow = true;
+	                  child.receiveShadow = true;
+	                }
+	              });
+	              resolve(object.children[0]);
+	            });
+	          });
+	        } catch (error) {
+	          reject(error);
+	        }
+	      });
 	    }
-	  });
-	  if (superClass) _setPrototypeOf(subClass, superClass);
-	}
+	  }]);
 
-	function _getPrototypeOf(o) {
-	  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-	    return o.__proto__ || Object.getPrototypeOf(o);
-	  };
-	  return _getPrototypeOf(o);
-	}
-
-	function _setPrototypeOf(o, p) {
-	  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-	    o.__proto__ = p;
-	    return o;
-	  };
-
-	  return _setPrototypeOf(o, p);
-	}
-
-	function _assertThisInitialized(self) {
-	  if (self === void 0) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }
-
-	  return self;
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (call && (typeof call === "object" || typeof call === "function")) {
-	    return call;
-	  }
-
-	  return _assertThisInitialized(self);
-	}
+	  return Loader$$1;
+	}();
 
 	var simplexNoise = createCommonjsModule(function (module, exports) {
 	/*
@@ -53570,45 +53609,6 @@
 	});
 	var simplexNoise_1 = simplexNoise.SimplexNoise;
 
-	var Loader$1 =
-	/*#__PURE__*/
-	function () {
-	  function Loader$$1() {
-	    _classCallCheck(this, Loader$$1);
-	  }
-
-	  _createClass(Loader$$1, [{
-	    key: "loadModel",
-	    value: function loadModel(file) {
-	      return new Promise(function (resolve, reject) {
-	        try {
-	          var MTLLoader = new THREE.MTLLoader();
-	          MTLLoader.load("./assets/models/".concat(file, ".mtl"), function (materials) {
-	            materials.preload();
-	            var OBJLoader = new THREE.OBJLoader();
-	            OBJLoader.setMaterials(materials);
-	            OBJLoader.load("./assets/models/".concat(file, ".obj"), function (object) {
-	              object.name = file;
-	              object.castShadow = true;
-	              object.traverse(function (child) {
-	                if (child instanceof Mesh) {
-	                  child.castShadow = true;
-	                  child.receiveShadow = true;
-	                }
-	              });
-	              resolve(object.children[0]);
-	            });
-	          });
-	        } catch (error) {
-	          reject(error);
-	        }
-	      });
-	    }
-	  }]);
-
-	  return Loader$$1;
-	}();
-
 	var Tree =
 	/*#__PURE__*/
 	function (_Object3D) {
@@ -53623,16 +53623,14 @@
 	  _createClass(Tree, [{
 	    key: "addTrees",
 	    value: function addTrees(positions, simplex, models) {
-	      var _this = this;
-
-	      var geometry = new BufferGeometry();
-	      positions.forEach(function (position) {
-	        var scale = simplex.noise2D(position.y, position.z).remap(-1, 1, 0.9, 1.2);
-	        var index = Math.floor(simplex.noise2D(position.x, position.z).remap(-1, 1, 0, 3));
+	      for (var i = 0; i < positions.length; i++) {
+	        var scale = simplex.noise2D(positions[i].y, positions[i].z).remap(-1, 1, 0.9, 1.2);
+	        var index = Math.floor(simplex.noise2D(positions[i].x, positions[i].z).remap(-1, 1, 0, 3));
 	        var model = models[index];
+	        var rotation = _Math.degToRad(simplex.noise2D(positions[i].y, positions[i].z) * 360);
 	        var tree = new Mesh(model.geometry, model.material);
-	        tree.position.set(position.x, position.y, position.z);
-	        tree.rotation.y = _Math.degToRad(simplex.noise2D(position.y, position.z) * 360);
+	        tree.position.set(positions[i].x, positions[i].y, positions[i].z);
+	        tree.rotation.y = rotation;
 	        tree.scale.set(scale, scale, scale);
 	        tree.traverse(function (child) {
 	          if (child instanceof Mesh) {
@@ -53642,9 +53640,8 @@
 	        });
 	        tree.castShadow = true;
 	        tree.receiveShadow = true;
-
-	        _this.add(tree);
-	      });
+	        this.add(tree);
+	      }
 	    }
 	  }]);
 
@@ -53689,7 +53686,7 @@
 	};
 
 	function layeredNoise(x, z, simplex) {
-	  var wavelength = 3.8;
+	  var wavelength = 3.1;
 	  var frequency = 0.01;
 	  var e = simplex.noise2D(x * frequency, z * frequency) * wavelength + simplex.noise2D(x * (frequency * 4), z * (frequency * 4)) * (wavelength / 4) + simplex.noise2D(x * (frequency * 8), z * (frequency * 8)) * (wavelength / 8);
 	  var convert;
@@ -53730,9 +53727,10 @@
 	    this.setHeight(); // Material
 
 	    this.material = new MeshPhongMaterial({
-	      color: new Color(0.225, 0.593, 0.162),
+	      // color: new Color(0.225, 0.593, 0.162),
 	      flatShading: true,
-	      shininess: 0
+	      shininess: 0,
+	      vertexColors: THREE.VertexColors
 	    }); // Mesh
 
 	    this.mesh = new Mesh(this.geometry, this.material);
@@ -53750,6 +53748,17 @@
 	    key: "setHeight",
 	    value: function setHeight() {
 	      var vertices = this.geometry.getAttribute("position").array;
+	      var groundColor = {
+	        r: 0.225,
+	        g: 0.593,
+	        b: 0.162
+	      };
+	      var mountainColor = {
+	        r: 0.346,
+	        g: 0.143,
+	        b: 0.072
+	      };
+	      var colors = [];
 
 	      for (var i = 2; i < vertices.length; i += 3) {
 	        var x = vertices[i - 2];
@@ -53757,9 +53766,16 @@
 	        var z = vertices[i];
 	        vertices[i] = -y;
 	        vertices[i - 1] = layeredNoise(x + this.size * this.offsetX, -y + this.size * this.offsetZ, this.simplex);
+
+	        if (vertices[i - 1] > -this.waterLevel * 1.5) {
+	          colors.push(mountainColor.r, mountainColor.g, mountainColor.b);
+	        } else {
+	          colors.push(groundColor.r, groundColor.g, groundColor.b);
+	        }
 	      }
 
 	      this.geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+	      this.geometry.addAttribute("color", new BufferAttribute(new Float32Array(colors), 3));
 	      this.geometry.computeVertexNormals();
 	    }
 	    /*
@@ -53827,13 +53843,13 @@
 	  return Terrain;
 	}();
 
-	var SIZE$1 = 50;
+	var SIZE$1 = 100;
 	var SEGMENTS = SIZE$1 / 2;
 
 	var World =
 	/*#__PURE__*/
 	function () {
-	  function World() {
+	  function World(treeModels, flowerModels) {
 	    _classCallCheck(this, World);
 
 	    this.simplex = new simplexNoise();
@@ -53841,11 +53857,8 @@
 	    this.smoothing = 30;
 	    this.tileCount = 9;
 	    this.tiles = [];
-	    this.treeCount = 4;
-	    this.treeModels = [];
-	    this.flowerCount = 3;
-	    this.flowerModels = [];
-	    this.loadModels();
+	    this.treeModels = treeModels;
+	    this.flowerModels = flowerModels;
 	    this.settings = {
 	      size: SIZE$1,
 	      segments: SEGMENTS,
@@ -53881,12 +53894,12 @@
 	          })) {
 	            var tile = new Terrain(xOffset, zOffset, _this.settings);
 
-	            var treeMesh = _this.generateMesh(tile.position.x, tile.position.z, 10, 4, "tree");
+	            var treeMesh = _this.generateMesh(tile.position.x, tile.position.z, 10, 3, "tree");
 
 	            treeMesh.castShadow = true;
 	            tile.mesh.add(treeMesh);
 
-	            var flowerMesh = _this.generateMesh(tile.position.x, tile.position.z, 2, 2, "flower");
+	            var flowerMesh = _this.generateMesh(tile.position.x, tile.position.z, 2, 1.5, "flower");
 
 	            tile.mesh.add(flowerMesh);
 
@@ -53966,76 +53979,6 @@
 	      this.generateTerrain(currentTile.x, currentTile.z);
 	    }
 	    /*
-	    * Utilizes Loader to load model files
-	    */
-
-	  }, {
-	    key: "loadModels",
-	    value: function () {
-	      var _loadModels = _asyncToGenerator(
-	      /*#__PURE__*/
-	      regeneratorRuntime.mark(function _callee() {
-	        var loader, i, model, _i, _model;
-
-	        return regeneratorRuntime.wrap(function _callee$(_context) {
-	          while (1) {
-	            switch (_context.prev = _context.next) {
-	              case 0:
-	                loader = new Loader$1();
-	                i = 1;
-
-	              case 2:
-	                if (!(i <= this.treeCount)) {
-	                  _context.next = 10;
-	                  break;
-	                }
-
-	                _context.next = 5;
-	                return loader.loadModel("tree".concat(i));
-
-	              case 5:
-	                model = _context.sent;
-	                this.treeModels.push(model);
-
-	              case 7:
-	                i++;
-	                _context.next = 2;
-	                break;
-
-	              case 10:
-	                _i = 1;
-
-	              case 11:
-	                if (!(_i <= this.flowerCount)) {
-	                  _context.next = 19;
-	                  break;
-	                }
-
-	                _context.next = 14;
-	                return loader.loadModel("flower".concat(_i));
-
-	              case 14:
-	                _model = _context.sent;
-	                this.flowerModels.push(_model);
-
-	              case 16:
-	                _i++;
-	                _context.next = 11;
-	                break;
-
-	              case 19:
-	              case "end":
-	                return _context.stop();
-	            }
-	          }
-	        }, _callee, this);
-	      }));
-
-	      return function loadModels() {
-	        return _loadModels.apply(this, arguments);
-	      };
-	    }()
-	    /*
 	    * Generate positions for mesh content and creates mesh
 	    */
 
@@ -54091,27 +54034,40 @@
 	  function Player(world) {
 	    _classCallCheck(this, Player);
 
-	    this.radius = 0.5;
-	    this.height = 0.5;
+	    this.radius = 0.15;
+	    this.height = 2;
 	    this.segments = 10;
 	    this.geometry = new SphereGeometry(this.radius, this.segments);
-	    this.material = new MeshPhongMaterial({
-	      color: 0xffff00,
-	      shininess: 0
+	    this.material = new MeshBasicMaterial({
+	      color: 0xffc107
 	    });
 	    this.mesh = new Mesh(this.geometry, this.material);
 	    this.mesh.position.y = world.getHeightAt(this.mesh.position.x, this.mesh.position.z) + this.height;
+	    this.light = new PointLight(0xffc107, 0.7, 10, 2);
+	    this.mesh.add(this.light);
 	    this.speed = 0.02;
 	  }
 
 	  _createClass(Player, [{
+	    key: "addTo",
+	    value: function addTo(scene) {
+	      scene.add(this.mesh, this.mesh);
+	    }
+	  }, {
 	    key: "move",
 	    value: function move(distance) {
 	      var position = this.mesh.position;
 
 	      if (distance) {
-	        this.mesh.translateX(distance.x * this.speed);
-	        this.mesh.translateZ(distance.z * this.speed);
+	        var velocityX = distance.x * this.speed;
+	        var velocityZ = distance.z * this.speed;
+
+	        if (velocityZ < -1) {
+	          velocityZ = -1;
+	        }
+
+	        this.mesh.translateX(velocityX);
+	        this.mesh.translateZ(velocityZ);
 	      }
 	    }
 	  }, {
@@ -54121,7 +54077,7 @@
 	      var y = world.getHeightAt(position.x, position.z);
 
 	      if (y < world.settings.waterLevel) {
-	        position.y = world.settings.waterLevel + this.height * 2;
+	        position.y = world.settings.waterLevel + this.height;
 	      } else {
 	        position.y = y + this.height;
 	      }
@@ -54141,8 +54097,9 @@
 
 	    _classCallCheck(this, Camera$$1);
 
-	    _this = _possibleConstructorReturn(this, _getPrototypeOf(Camera$$1).call(this, fov, aspect, near, far));
-	    _this.distanceToPlayer = 15;
+	    _this = _possibleConstructorReturn(this, _getPrototypeOf(Camera$$1).call(this, fov, aspect, near, far)); // this.distanceToPlayer = 15;
+
+	    _this.distanceToPlayer = 10;
 	    return _this;
 	  }
 
@@ -54163,13 +54120,13 @@
 	  function Lights(camera) {
 	    _classCallCheck(this, Lights);
 
-	    this.hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.5); // hemiLight.color.setHSL(0.6, 1, 0.6);
-
+	    this.hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.5);
+	    this.hemiLight.color.setHSL(0.6, 1, 0.6);
 	    this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
 	    this.hemiLight.position.set(0, 10, 0);
-	    this.dirLight = new DirectionalLight(0xffffff, 0.7);
-	    this.dirLight.color.setHSL(0.1, 1, 0.95);
-	    this.dirLight.position.set(1, 1, -1);
+	    this.dirLight = new DirectionalLight(0xffffff, 0.5);
+	    this.dirLight.color.setHSL(0.12, 1, 0.7);
+	    this.dirLight.position.set(1, 0.5, -1);
 	    this.dirLight.position.multiplyScalar(30);
 	    this.dirLight.castShadow = true;
 	    this.dirLight.shadow.camera.top = camera.fov;
@@ -54179,8 +54136,8 @@
 	  }
 
 	  _createClass(Lights, [{
-	    key: "add",
-	    value: function add(scene) {
+	    key: "addTo",
+	    value: function addTo(scene) {
 	      scene.add(this.hemiLight, this.dirLight);
 	    }
 	  }]);
@@ -54223,35 +54180,113 @@
 	  return Ray$$1;
 	}(Raycaster);
 
-	var scene = new Scene();
-	scene.background = new Color(0x78c9f2);
-	var renderer = new WebGLRenderer({
-	  antialiasing: true
-	});
-	var stats = new Stats();
-	var callPanel = stats.addPanel(new Stats.Panel("Calls", "#ff8", "#221"));
-	var geometryPanel = stats.addPanel(new Stats.Panel("Geometries", "#ff8", "#221"));
-	stats.domElement.style.position = "absolute";
-	stats.domElement.style.top = "0";
-	document.body.appendChild(stats.domElement);
+	var scene, renderer, stats, callPanel, geometryPanel, world, camera, lights, raycaster, player, treeModels, flowerModels;
 	var mouse = new Vector2();
 	mouse.isPressed = false;
-	var world = new World(); // Third person view
+	function loadModels() {
+	  return _loadModels.apply(this, arguments);
+	}
 
-	var player = new Player(world);
-	var camera = new Camera$1(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-	var lights = new Lights(camera);
-	lights.add(scene);
-	var raycaster = new Ray$1(); // const controls = new THREE.OrbitControls(camera);
+	function _loadModels() {
+	  _loadModels = _asyncToGenerator(
+	  /*#__PURE__*/
+	  regeneratorRuntime.mark(function _callee() {
+	    var loader, treeCount, flowerCount, i, model, _i, _model;
+
+	    return regeneratorRuntime.wrap(function _callee$(_context) {
+	      while (1) {
+	        switch (_context.prev = _context.next) {
+	          case 0:
+	            loader = new Loader$1();
+	            treeCount = 3;
+	            flowerCount = 3;
+	            treeModels = [];
+	            flowerModels = [];
+	            i = 1;
+
+	          case 6:
+	            if (!(i <= treeCount)) {
+	              _context.next = 14;
+	              break;
+	            }
+
+	            _context.next = 9;
+	            return loader.loadModel("tree".concat(i));
+
+	          case 9:
+	            model = _context.sent;
+	            treeModels.push(model);
+
+	          case 11:
+	            i++;
+	            _context.next = 6;
+	            break;
+
+	          case 14:
+	            _i = 1;
+
+	          case 15:
+	            if (!(_i <= flowerCount)) {
+	              _context.next = 23;
+	              break;
+	            }
+
+	            _context.next = 18;
+	            return loader.loadModel("flower".concat(_i));
+
+	          case 18:
+	            _model = _context.sent;
+	            flowerModels.push(_model);
+
+	          case 20:
+	            _i++;
+	            _context.next = 15;
+	            break;
+
+	          case 23:
+	            init();
+
+	          case 24:
+	          case "end":
+	            return _context.stop();
+	        }
+	      }
+	    }, _callee, this);
+	  }));
+	  return _loadModels.apply(this, arguments);
+	}
 
 	function init() {
+	  // Renderer settings
+	  renderer = new WebGLRenderer();
 	  renderer.setSize(window.innerWidth, window.innerHeight);
 	  renderer.shadowMap.enabled = true;
 	  renderer.shadowMap.type = PCFSoftShadowMap;
 	  renderer.gammaOutput = true;
-	  document.body.appendChild(renderer.domElement);
-	  scene.add(player.mesh);
+	  document.body.appendChild(renderer.domElement); // Scene settings
+
+	  scene = new Scene();
+	  scene.background = new Color(0x78c9f2); // blue
+	  // scene.background = new Color(0xf0be7e); // yellow
+
+	  scene.fog = new FogExp2(0x78c9f2, 0.018); // Stats settings
+
+	  stats = new Stats();
+	  callPanel = stats.addPanel(new Stats.Panel("Calls", "#ff8", "#221"));
+	  geometryPanel = stats.addPanel(new Stats.Panel("Geometries", "#ff8", "#221"));
+	  stats.domElement.style.position = "absolute";
+	  stats.domElement.style.top = "0";
+	  document.body.appendChild(stats.domElement); // Init objects
+
+	  camera = new Camera$1(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+	  lights = new Lights(camera);
+	  lights.addTo(scene);
+	  raycaster = new Ray$1();
+	  world = new World(treeModels, flowerModels);
+	  player = new Player(world);
 	  world.addTo(scene);
+	  player.addTo(scene);
+	  animate();
 	}
 	function animate() {
 	  requestAnimationFrame(animate); // Third person controls
@@ -54265,8 +54300,7 @@
 	  }
 
 	  camera.update(player.mesh.position);
-	  world.update(player.mesh.position, scene); // controls.update();
-
+	  world.update(player.mesh.position, scene);
 	  callPanel.update(renderer.info.render.calls, 460);
 	  geometryPanel.update(renderer.info.memory.geometries, 460);
 	  stats.update();
@@ -54289,8 +54323,7 @@
 	window.addEventListener("touchend", handleClick);
 	window.addEventListener("touchmove", moveMouse);
 
-	init();
-	animate();
+	loadModels();
 
 }());
 //# sourceMappingURL=index.js.map
