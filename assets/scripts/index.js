@@ -54045,7 +54045,7 @@
 	    this.mesh.position.y = world.getHeightAt(this.mesh.position.x, this.mesh.position.z) + this.height;
 	    this.light = new PointLight(0xffc107, 0.7, 10, 2);
 	    this.mesh.add(this.light);
-	    this.speed = 0.02;
+	    this.speed = 0.5;
 	  }
 
 	  _createClass(Player, [{
@@ -54055,20 +54055,10 @@
 	    }
 	  }, {
 	    key: "move",
-	    value: function move(distance) {
+	    value: function move(mouse) {
 	      var position = this.mesh.position;
-
-	      if (distance) {
-	        var velocityX = distance.x * this.speed;
-	        var velocityZ = distance.z * this.speed;
-
-	        if (velocityZ < -1) {
-	          velocityZ = -1;
-	        }
-
-	        this.mesh.translateX(velocityX);
-	        this.mesh.translateZ(velocityZ);
-	      }
+	      this.mesh.translateX(mouse.x.remap(0, 1, -this.speed, this.speed));
+	      this.mesh.translateZ(mouse.y.remap(0, 1, -this.speed, this.speed));
 	    }
 	  }, {
 	    key: "updateHeight",
@@ -54145,42 +54135,7 @@
 	  return Lights;
 	}();
 
-	var Ray$1 =
-	/*#__PURE__*/
-	function (_Raycaster) {
-	  _inherits(Ray$$1, _Raycaster);
-
-	  function Ray$$1() {
-	    _classCallCheck(this, Ray$$1);
-
-	    return _possibleConstructorReturn(this, _getPrototypeOf(Ray$$1).apply(this, arguments));
-	  }
-
-	  _createClass(Ray$$1, [{
-	    key: "getDistance",
-	    value: function getDistance(scene, player) {
-	      var intersections = this.intersectObjects(scene.children);
-	      var direction;
-
-	      if (intersections.length > 0) {
-	        direction = intersections[0].point;
-	      } else {
-	        var _player$mesh$position = player.mesh.position,
-	            x = _player$mesh$position.x,
-	            y = _player$mesh$position.y,
-	            z = _player$mesh$position.z;
-	        direction = new Vector3(x, y, z);
-	      }
-
-	      var distance = direction.sub(player.mesh.position);
-	      return distance;
-	    }
-	  }]);
-
-	  return Ray$$1;
-	}(Raycaster);
-
-	var scene, renderer, stats, callPanel, geometryPanel, world, camera, lights, raycaster, player, treeModels, flowerModels;
+	var scene, renderer, stats, callPanel, geometryPanel, world, camera, lights, player, treeModels, flowerModels;
 	var mouse = new Vector2();
 	mouse.isPressed = false;
 	function loadModels() {
@@ -54281,7 +54236,6 @@
 	  camera = new Camera$1(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 	  lights = new Lights(camera);
 	  lights.addTo(scene);
-	  raycaster = new Ray$1();
 	  world = new World(treeModels, flowerModels);
 	  player = new Player(world);
 	  world.addTo(scene);
@@ -54289,13 +54243,10 @@
 	  animate();
 	}
 	function animate() {
-	  requestAnimationFrame(animate); // Third person controls
-
-	  raycaster.setFromCamera(mouse, camera);
-	  var distance = raycaster.getDistance(scene, player);
+	  requestAnimationFrame(animate);
 
 	  if (mouse.isPressed) {
-	    player.move(distance);
+	    player.move(mouse);
 	    player.updateHeight(world);
 	  }
 
@@ -54307,9 +54258,15 @@
 	  renderer.render(scene, camera);
 	}
 
+	function onWindowResize() {
+	  camera.aspect = window.innerWidth / window.innerHeight;
+	  camera.updateProjectionMatrix();
+	  renderer.setSize(window.innerWidth, window.innerHeight);
+	}
+
 	function moveMouse(event) {
-	  mouse.x = event.clientX / window.innerWidth * 2 - 1;
-	  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+	  mouse.x = event.clientX / window.innerWidth;
+	  mouse.y = event.clientY / window.innerHeight;
 	}
 
 	function handleClick() {
@@ -54322,6 +54279,7 @@
 	window.addEventListener("touchstart", handleClick);
 	window.addEventListener("touchend", handleClick);
 	window.addEventListener("touchmove", moveMouse);
+	window.addEventListener("resize", onWindowResize, false);
 
 	loadModels();
 
