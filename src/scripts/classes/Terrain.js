@@ -126,8 +126,8 @@ export default class Terrain {
   shouldBeRemoved(position) {
     const isOutLeft = this.position.x < position.x - this.size * 1.5;
     const isOutRight = this.position.x > position.x + this.size * 1.5;
-    const isOutTop = this.position.z < position.z - this.size * 2.5;
-    const isOutBottom = this.position.z > position.z + this.size;
+    const isOutTop = this.position.z < position.z - this.size * 1.5;
+    const isOutBottom = this.position.z > position.z + this.size * 1.5;
 
     return isOutLeft || isOutRight || isOutTop || isOutBottom;
   }

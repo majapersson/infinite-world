@@ -18,7 +18,7 @@ export default class Lights {
     this.dirLight.shadow.camera.bottom = -camera.fov;
   }
 
-  add(scene) {
+  addTo(scene) {
     scene.add(this.hemiLight, this.dirLight);
   }
 }

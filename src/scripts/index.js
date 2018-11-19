@@ -1,5 +1,4 @@
 import "@babel/polyfill";
-import { init, animate } from "./Scene";
+import { loadModels } from "./Scene";
 
-init();
-animate();
+loadModels();

@@ -1,7 +1,6 @@
 import { Mesh, Vector3, Scene } from "three";
 import SimplexNoise from "simplex-noise";
 
-import Loader from "./Loader";
 import Terrain from "./Terrain";
 import Tree from "./Tree";
 import Flower from "./Flower";
@@ -12,17 +11,14 @@ const SIZE = 50;
 const SEGMENTS = SIZE / 2;
 
 export default class World {
-  constructor() {
+  constructor(treeModels, flowerModels) {
     this.simplex = new SimplexNoise();
     this.height = 15;
     this.smoothing = 30;
     this.tileCount = 9;
     this.tiles = [];
-    this.treeCount = 3;
-    this.treeModels = [];
-    this.flowerCount = 3;
-    this.flowerModels = [];
-    this.loadModels();
+    this.treeModels = treeModels;
+    this.flowerModels = flowerModels;
 
     this.settings = {
       size: SIZE,
@@ -51,7 +47,7 @@ export default class World {
   */
   generateTerrain(x, z) {
     for (let xOffset = x - 1; xOffset < x + 2; xOffset++) {
-      for (let zOffset = z - 2; zOffset < z + 1; zOffset++) {
+      for (let zOffset = z - 1; zOffset < z + 2; zOffset++) {
         if (
           !this.tiles.some(
             tile => tile.offsetX === xOffset && tile.offsetZ === zOffset
@@ -139,23 +135,6 @@ export default class World {
     };
 
     this.generateTerrain(currentTile.x, currentTile.z);
-  }
-
-  /*
-  * Utilizes Loader to load model files
-  */
-  async loadModels() {
-    const loader = new Loader();
-
-    for (let i = 1; i <= this.treeCount; i++) {
-      const model = await loader.loadModel(`tree${i}`);
-      this.treeModels.push(model);
-    }
-
-    for (let i = 1; i <= this.flowerCount; i++) {
-      const model = await loader.loadModel(`flower${i}`);
-      this.flowerModels.push(model);
-    }
   }
 
   /*
