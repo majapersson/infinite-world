@@ -22,7 +22,6 @@ let scene,
   stats,
   callPanel,
   geometryPanel,
-  mouse,
   world,
   camera,
   lights,
@@ -31,9 +30,9 @@ let scene,
   treeModels,
   flowerModels;
 
-/*
-* Utilizes Loader to load model files
-*/
+const mouse = new Vector2();
+mouse.isPressed = false;
+
 export async function loadModels() {
   const loader = new Loader();
   let treeCount = 3;
@@ -79,9 +78,6 @@ export function init() {
   document.body.appendChild(stats.domElement);
 
   // Init objects
-  mouse = new Vector2();
-  mouse.isPressed = false;
-
   camera = new Camera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
   lights = new Lights(camera);
@@ -93,7 +89,7 @@ export function init() {
   player = new Player(world);
 
   world.addTo(scene);
-  world.addTo(player);
+  player.addTo(scene);
 
   animate();
 }
