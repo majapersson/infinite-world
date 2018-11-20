@@ -53671,7 +53671,14 @@
 	        var flower = new Mesh(model.geometry, model.material);
 	        flower.position.set(position.x, position.y, position.z);
 	        flower.rotation.y = _Math.degToRad(simplex.noise2D(position.y, position.z) * 360);
-	        flower.scale.set(scale, scale, scale);
+	        flower.scale.set(scale, scale, scale); // flower.traverse(child => {
+	        //   if (child instanceof Mesh) {
+	        //     child.castShadow = true;
+	        //     child.receiveShadow = true;
+	        //   }
+	        // });
+	        // flower.castShadow = true;
+	        // flower.receiveShadow = true;
 
 	        _this.add(flower);
 	      });
@@ -54043,7 +54050,8 @@
 	    });
 	    this.mesh = new Mesh(this.geometry, this.material);
 	    this.mesh.position.y = world.getHeightAt(this.mesh.position.x, this.mesh.position.z) + this.height;
-	    this.light = new PointLight(0xffc107, 0.7, 10, 2);
+	    this.light = new PointLight(0xffc107, 1, 10, 2);
+	    this.light.castShadow = true;
 	    this.mesh.add(this.light);
 	    this.speed = 0.5;
 	  }
@@ -54135,7 +54143,7 @@
 	  return Lights;
 	}();
 
-	var scene, renderer, stats, callPanel, geometryPanel, world, camera, lights, player, treeModels, flowerModels;
+	var scene, renderer, world, camera, lights, player, treeModels, flowerModels;
 	var mouse = new Vector2();
 	mouse.isPressed = false;
 	function loadModels() {
@@ -54225,13 +54233,13 @@
 	  // scene.background = new Color(0xf0be7e); // yellow
 
 	  scene.fog = new FogExp2(0x78c9f2, 0.018); // Stats settings
-
-	  stats = new Stats();
-	  callPanel = stats.addPanel(new Stats.Panel("Calls", "#ff8", "#221"));
-	  geometryPanel = stats.addPanel(new Stats.Panel("Geometries", "#ff8", "#221"));
-	  stats.domElement.style.position = "absolute";
-	  stats.domElement.style.top = "0";
-	  document.body.appendChild(stats.domElement); // Init objects
+	  // stats = new Stats();
+	  // callPanel = stats.addPanel(new Stats.Panel("Calls", "#ff8", "#221"));
+	  // geometryPanel = stats.addPanel(new Stats.Panel("Geometries", "#ff8", "#221"));
+	  // stats.domElement.style.position = "absolute";
+	  // stats.domElement.style.top = "0";
+	  // document.body.appendChild(stats.domElement);
+	  // Init objects
 
 	  camera = new Camera$1(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 	  lights = new Lights(camera);
@@ -54251,10 +54259,10 @@
 	  }
 
 	  camera.update(player.mesh.position);
-	  world.update(player.mesh.position, scene);
-	  callPanel.update(renderer.info.render.calls, 460);
-	  geometryPanel.update(renderer.info.memory.geometries, 460);
-	  stats.update();
+	  world.update(player.mesh.position, scene); // callPanel.update(renderer.info.render.calls, 460);
+	  // geometryPanel.update(renderer.info.memory.geometries, 460);
+	  // stats.update();
+
 	  renderer.render(scene, camera);
 	}
 
