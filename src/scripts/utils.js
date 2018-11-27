@@ -7,7 +7,7 @@ Number.prototype.remap = function(in_min, in_max, out_min, out_max) {
 };
 
 export function layeredNoise(x, z, simplex) {
-  let wavelength = 3.8;
+  let wavelength = 3.1;
   let frequency = 0.01;
   let e =
     simplex.noise2D(x * frequency, z * frequency) * wavelength +

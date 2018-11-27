@@ -7,7 +7,7 @@ import Flower from "./Flower";
 
 import { roundTwoDecimals, layeredNoise } from "../utils";
 
-const SIZE = 50;
+const SIZE = 100;
 const SEGMENTS = SIZE / 2;
 
 export default class World {
@@ -65,7 +65,7 @@ export default class World {
             tile.position.x,
             tile.position.z,
             2,
-            1.5,
+            1,
             "flower"
           );
           tile.mesh.add(flowerMesh);
@@ -114,9 +114,6 @@ export default class World {
 
     removeTiles.forEach(tile => {
       scene.remove(tile.mesh);
-
-      tile.mesh.geometry.dispose();
-      tile.mesh.material.dispose();
     });
 
     this.tiles = keepTiles;

@@ -4,7 +4,8 @@ class Camera extends PerspectiveCamera {
   constructor(fov, aspect, near, far) {
     super(fov, aspect, near, far);
 
-    this.distanceToPlayer = 15;
+    // this.distanceToPlayer = 15;
+    this.distanceToPlayer = 10;
   }
 
   update(position) {
